@@ -4,15 +4,17 @@ import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./pages/Home/index.jsx";
+import SignIn from "./pages/SignIn/SignIn.jsx";
+import SignUp from "./pages/SignUp/SignUp.jsx";
 
 // bootstrap css
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 
 // fonts and icons
-import "././assets/css/icofont.min.css";
-import "././assets/css/animate.css";
-import "././assets/css/style.min.css";
+import "./assets/css/icofont.min.css";
+import "./assets/css/animate.css";
+import "./assets/css/style.min.css";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
         element: <Home />,
       },
     ],
+  },
+  {
+    path: "/sign-in",
+    element: <SignIn />,
+  },
+  {
+    path: "/sign-up",
+    element: <SignUp />,
   },
 ]);
 
