@@ -24,34 +24,6 @@ const addressList = [
   },
 ];
 
-const socialList = [
-  {
-    iconName: "icofont-facebook",
-    siteLink: "#",
-    className: "facebook",
-  },
-  {
-    iconName: "icofont-twitter",
-    siteLink: "#",
-    className: "twitter",
-  },
-  {
-    iconName: "icofont-linkedin",
-    siteLink: "#",
-    className: "linkedin",
-  },
-  {
-    iconName: "icofont-instagram",
-    siteLink: "#",
-    className: "instagram",
-  },
-  {
-    iconName: "icofont-pinterest",
-    siteLink: "#",
-    className: "pinterest",
-  },
-];
-
 const ItemList = [
   {
     text: "All Products",
@@ -166,15 +138,6 @@ const Footer = () => {
                           <li key={i}>
                             <i className={val.iconName}></i>
                             {val.text}
-                          </li>
-                        ))}
-                      </ul>
-                      <ul className="lab-ul social-icons">
-                        {socialList.map((val, i) => (
-                          <li key={i}>
-                            <a href={val.siteLink} className={val.className}>
-                              <i className={val.iconName}></i>
-                            </a>
                           </li>
                         ))}
                       </ul>

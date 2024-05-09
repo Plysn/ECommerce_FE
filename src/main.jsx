@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home/index.jsx";
 import SignIn from "./pages/SignIn/SignIn.jsx";
 import SignUp from "./pages/SignUp/SignUp.jsx";
+import CartPage from "./pages/Shop/CartPage.jsx";
 
 // bootstrap css
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/cart-page",
+        element: <CartPage />,
       },
     ],
   },

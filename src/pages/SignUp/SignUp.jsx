@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+// import GoogleLogin from 'react-google-login';
+// import { Button } from "antd";
+// import { ReactComponent as IconGoogle } from '../../assets/images/logo/google.svg';
+
 const title = "Register Now";
 const socialTitle = "Register With Social Media";
 const btnText = "Get Started Now";
@@ -55,39 +59,25 @@ const SignUp = () => {
                 <span>or</span>
               </span>
 
-              <h5 className="subtitle">{socialTitle}</h5>
-              <ul className="lab-ul social-icons justify-content-center">
-                <li>
-                  <button className="github">
-                    <i className="icofont-github"></i>
-                  </button>
-                </li>
-                <li>
-                  <a href="/" className="facebook">
-                    <i className="icofont-facebook"></i>
-                  </a>
-                </li>
-                <li>
-                  <a href="/" className="twitter">
-                    <i className="icofont-twitter"></i>
-                  </a>
-                </li>
-                <li>
-                  <a href="/" className="linkedin">
-                    <i className="icofont-linkedin"></i>
-                  </a>
-                </li>
-                <li>
-                  <a href="/" className="instagram">
-                    <i className="icofont-instagram"></i>
-                  </a>
-                </li>
-              </ul>
+              {/* {/* <h5 className="subtitle">{socialTitle}</h5> */}
+              {/* <GoogleLogin
+                render={(renderProps) => (
+                  <Button
+                    htmlType="submit"
+                    icon={<IconGoogle />}
+                    className="login-form-button login-form-button-google fz-16"
+                  >
+                    Sign in with Google
+                  </Button>
+                )}
+                buttonText="Sign in with Google"
+                cookiePolicy="single_host_origin"
+              /> */}
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
