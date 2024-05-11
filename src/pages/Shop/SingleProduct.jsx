@@ -8,15 +8,26 @@ import { Navigation } from "swiper/modules";
 import Review from "../../components/Review/Review";
 import MostPopularPost from "../blog/MostPopularPost";
 import ProductDisplay from "./ProductDisplay";
-import Data from "../../data/products.json";
+import axios from "axios";
+
 const SingleProduct = () => {
-  const [product, setProduct] = useState([]);
+  const [result, setResult] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    setProduct(Data);
-  }, []);
-
-  const result = product.filter((p) => p.id === id);
+    async function get_data() {
+      try {
+        console.log(id);
+        const rep = await axios.get(`/api/product/get-details/${id}`);
+       
+        setResult([rep.data.data])
+        console.log(rep)
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    }
+    get_data();
+   
+  }, [id]);
   return (
     <div>
       <BreadCrumb title={"OUR SHOP SINGLE"} curPage={"Shop / Single Product"} />
