@@ -1,27 +1,37 @@
 import React from "react";
 import BreadCrumb from "../../components/Breadcrumb/BreadCrumb";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Search from "./Search";
 import Pagination from "./Pagination";
 import ShopCategory from "./ShopCategory";
-import PopularPost from "./PopularPost";
 import Tags from "./Tags";
 import ProductCards from "./ProductCards";
 const showResult = "Showing 01 - 12 of 139 Results";
 import MostPopularPost from "../Blog/MostPopularPost";
-import Data from "../../data/products.json";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Shop = () => {
+  const { id } = useParams();
   const [GridList, setGridList] = useState(true);
-  const [products, setProducts] = useState(Data);
-
-  //   category active colors
+  const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-
-  // pagination
-  // Get current products to display
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12; // Number of products per page
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`/api/product/get-all`);
+      setProducts(response.data.data);
+      console.log(response);
+    } catch (error) {
+      console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -36,10 +46,10 @@ const Shop = () => {
   };
 
   // category based filtering
-  const menuItems = [...new Set(Data.map((Val) => Val.category))];
+  const menuItems = [...new Set(products.map((Val) => Val.category))];
 
   const filterItem = (curcat) => {
-    const newItem = Data.filter((newVal) => {
+    const newItem = products.filter((newVal) => {
       return newVal.category === curcat;
     });
     setSelectedCategory(curcat);
