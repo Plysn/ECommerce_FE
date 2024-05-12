@@ -1,0 +1,46 @@
+.admin-page {
+  padding-top: 100px;
+  height: 100vh;
+  background-color: #f1f1f1;
+  display: flex;
+
+  .side-menu {
+    height: 100%;
+    width: 250px;
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-right: 1px solid #e8e8e8;
+
+    .ant-menu {
+      background-color: #f1f1f1;
+      border-right: 0;
+    }
+  }
+
+  .content {
+    padding: 20px;
+    width: 100%;
+    background-color: #f1f1f1;
+  }
+
+  .ant-layout-sider {
+    background-color: #f1f1f1;
+    min-width: 200px;
+  }
+
+  .site-layout {
+    width: calc(100% - 250px);
+  }
+}
+
+.ant-pagination-options .ant-select {
+  visibility: hidden;
+}
+
+.site-layout-content {
+  height: 100%;
+  width: 80%;
+  position: absolute;
+  right: 10px;
+  top: 70px;
+}

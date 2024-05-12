@@ -1,0 +1,57 @@
+.reset-password-mail {
+  height: 90vh;
+
+  .logo {
+    padding: 15px 30px;
+    border-bottom: 1px solid #efefef;
+
+    svg {
+      width: 200px;
+    }
+  }
+
+  .account-wrapper {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #333;
+    }
+  }
+
+  .reset-password-form {
+    width: 100%;
+    max-width: 640px;
+    border-radius: 8px;
+    background: #f6f9fc;
+    margin: auto;
+    padding: 50px 52px 20px;
+  }
+
+  .input-email {
+    height: 52px;
+    border: 1px solid #bdbfc8;
+  }
+
+  .list-message {
+    margin: 0;
+    padding: 27px 0 51px;
+  }
+
+  .button-send {
+    height: 50px;
+    margin-top: 20px;
+    color: white;
+  }
+
+  .button-cancel {
+    height: 50px;
+    margin-top: 20px;
+    color: #f16126;
+    background: white;
+  }
+}

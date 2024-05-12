@@ -16,7 +16,17 @@ const SignUp = () => {
 
   return (
     <div>
-      <div className="login-section padding-tb section-bg">
+      <img src="https://accgroup.vn/wp-content/uploads/2023/01/tmdt.jpg.webp"
+        alt="Background"
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: '-1',
+          filter: 'blur(4px)'
+        }} />
+      <div className="login-section padding-tb">
         <div className="container">
           <div className="account-wrapper">
             <h3 className="title">{title}</h3>

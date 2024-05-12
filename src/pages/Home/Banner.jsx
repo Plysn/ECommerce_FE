@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import productData from "../../data/products.json";
 import { Link } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
 
 const title = (
   <h2>
@@ -39,8 +40,8 @@ const Banner = () => {
               value={searchInput}
               onChange={handleSearch}
             />
-            <button type="submit">
-              <i className="icofont-search"></i>
+            <button type="submit" style={{ paddingRight: 40, fontSize: 20, color: "#ffdf40" }}>
+              Search
             </button>
           </form>
           <p>{desc}</p>
