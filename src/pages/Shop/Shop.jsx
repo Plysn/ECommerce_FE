@@ -10,6 +10,9 @@ import ProductCards from "./ProductCards";
 const showResult = "Showing 01 - 12 of 139 Results";
 import MostPopularPost from "../Blog/MostPopularPost";
 import Data from "../../data/products.json";
+// import MostPopularPost from "../Blog/MostPopularPost";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Shop = () => {
   const [GridList, setGridList] = useState(true);
@@ -59,9 +62,8 @@ const Shop = () => {
                 <div className="shop-title d-flex flex-wrap justify-content-between">
                   <p>{showResult}</p>
                   <div
-                    className={`product-view-mode ${
-                      GridList ? "gridActive" : "listActive"
-                    }`}
+                    className={`product-view-mode ${GridList ? "gridActive" : "listActive"
+                      }`}
                   >
                     <a className="grid" onClick={() => setGridList(!GridList)}>
                       <i className="icofont-ghost"></i>
