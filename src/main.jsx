@@ -19,6 +19,10 @@ import "./assets/css/animate.css";
 import "./assets/css/style.min.css";
 import ResetPassword from "./pages/SignIn/ResetPassword.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
+import Blog from "./pages/Blog/Blog.jsx";
+import SingleBlog from "./pages/Blog/SingleBlog.jsx";
+import Shop from "./pages/Shop/Shop.jsx";
+import CheckoutPage from "./pages/Shop/CheckoutPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +32,18 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/shop",
+        element: <Shop />,
+      },
+      {
+        path: "/blog",
+        element: <Blog />,
+      },
+      {
+        path: "/blog/:id",
+        element: <SingleBlog />,
       },
       {
         path: "/cart-page",
@@ -40,7 +56,11 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />
-      }
+      },
+      {
+        path: "/check-out",
+        element: <CheckoutPage />
+      },
     ],
   },
   {
