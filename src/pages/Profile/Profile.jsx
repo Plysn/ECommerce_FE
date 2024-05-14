@@ -17,6 +17,15 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMismatch, setPasswordMismatch] = useState(true);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleUploadClick = () => {
+    // Code to upload the file goes here
+  };
 
   const handleNewPasswordChange = (event) => {
     setNewPassword(event.target.value);
@@ -80,8 +89,7 @@ const Profile = () => {
       <div class="container profile-box">
         <div id="about" class="home row">
           <div class="image-box">
-            <img src="assets/images/profile.jpg" alt="" />
-
+            <img src="https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.668xw:1.00xh;0.119xw,0&resize=1200:*" alt="avt-user" />
           </div>
         </div>
         <div class="basic-detail row">

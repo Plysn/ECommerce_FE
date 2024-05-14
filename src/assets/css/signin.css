@@ -55,3 +55,24 @@
     background: white;
   }
 }
+
+.google-signin-btn {
+  background-color: rgb(255, 255, 255);
+  color: #5c5c5c;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 2px solid #e0e0e0;
+}
+
+.google-signin-btn svg {
+  margin-right: 10px;
+}
+
+.google-signin-btn:hover {
+  background-color: rgb(255, 255, 255, 0.8);
+}
