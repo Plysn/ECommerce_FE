@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Search = ({ products }) => {
+const Search = ({ products, GridList }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredProducts = products.filter((product) =>
@@ -26,7 +26,7 @@ const Search = ({ products }) => {
       <div>
         {searchTerm &&
           filteredProducts.map((product) => (
-            <Link key={product._id} to={`/shop/${product._id}`}>
+            <Link key={product.id} to={`/shop/${product.id}`}>
               <div className="d-flex gap-3 p-2">
                 <div>
                   <div className="pro-thumb h-25">
@@ -40,7 +40,7 @@ const Search = ({ products }) => {
                 </div>
                 <div className="product-content">
                   <p>
-                    <Link to={`/shop/${product._id}`}>{product.name}</Link>
+                    <Link to={`/shop/${product.id}`}>{product.name}</Link>
                   </p>
                   <h6>${product.price}</h6>
                 </div>

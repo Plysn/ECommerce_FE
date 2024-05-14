@@ -22,7 +22,7 @@ const ProductCards = ({ products, GridList }) => {
                 />
               </div>
               <div className="product-action-link product-action-link-wrap">
-                <Link to={`/shop/${product._id}`}>
+                <Link to={`/shop/${product.id}`}>
                   <i className="icofont-eye"></i>
                 </Link>
                 <a href="#">
@@ -35,7 +35,7 @@ const ProductCards = ({ products, GridList }) => {
             </div>
             <div className="product-content">
               <h5>
-                <Link to={`/shop/${product._id}`}>{product.name}</Link>
+                <Link to={`/shop/${product.id}`}>{product.name}</Link>
               </h5>
               <p className="productRating">
                 <Rating />
@@ -61,7 +61,7 @@ const ProductCards = ({ products, GridList }) => {
               </div>
             </div>
             <div className="product-content">
-              <Link to={`/shop/${product._id}`}>{product.name}</Link>
+              <Link to={`/shop/${product.id}`}>{product.name}</Link>
               <p className="productRating">
                 <Rating />
               </p>
