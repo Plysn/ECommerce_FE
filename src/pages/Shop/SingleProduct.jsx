@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Navigation } from "swiper/modules";
 import Review from "../../components/Review/Review";
-import MostPopularPost from "../blog/MostPopularPost";
+import MostPopularPost from "../Blog/MostPopularPost";
 import ProductDisplay from "./ProductDisplay";
 import Data from "../../data/products.json";
 const SingleProduct = () => {
