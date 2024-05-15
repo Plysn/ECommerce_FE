@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Table, Space, Button, Modal, Form, Input, Upload, Select, Checkbox } from "antd";
+import { Table, Space, Button, Modal, Form, Input, Upload, Select, Image } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import "../../assets/css/admin.css";
-import Data from "../../data/products.json";
-import SideMenu from "../../components/Side Menu/SideMenu";
+import { message } from "antd";
+import productApi from "../../services/product";
+import categoryApi from "../../services/category";
+import { CloseCircleFilled, PlusOutlined } from '@ant-design/icons';
 
 const ProductAdminPage = () => {
   const [filterCategory, setFilterCategory] = useState("");
@@ -12,6 +14,24 @@ const ProductAdminPage = () => {
   const [visible, setVisible] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
   const [form] = Form.useForm();
+
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await productApi.getListProducts();
+      setProducts(response.data.data);
+      const categoryResponse = await categoryApi.getAdminCategories();
+      setCategories(categoryResponse.data.data); // assuming you have a state variable 'categories'
+    } catch (error) {
+      message.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const columns = [
     {
@@ -31,12 +51,12 @@ const ProductAdminPage = () => {
     },
     {
       title: "Category",
-      dataIndex: "category",
+      dataIndex: ["category", "name"],
       key: "category",
     },
     {
       title: "Quantity",
-      dataIndex: "quantity",
+      dataIndex: "stock",
       key: "quantity",
     },
     {
@@ -53,18 +73,6 @@ const ProductAdminPage = () => {
     },
   ];
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    // try {
-    //   const response = await axios.get("your_api_url/products");
-    //   setProducts(response.data);
-    // } catch (error) {
-    //   console.error("Error fetching products:", error);
-    // }
-  };
 
   const handleEdit = (record) => {
     form.setFieldsValue(record);
@@ -74,21 +82,26 @@ const ProductAdminPage = () => {
   const handleDelete = async (id) => {
     // try {
     //   await axios.delete(`your_api_url/products/${id}`);
-    //   fetchProducts();
+    //   fetchData();
     // } catch (error) {
     //   console.error("Error deleting product:", error);
     // }
   };
 
   const handleOk = async () => {
-    // try {
-    //   const values = await form.validateFields();
-    //   await axios.put(`your_api_url/products/${values.id}`, values);
-    //   setVisible(false);
-    //   fetchProducts();
-    // } catch (error) {
-    //   console.error("Error updating product:", error);
-    // }
+    const values = await form.validateFields();
+    const imgs = values.image.fileList?.map((img) => { return img.originFileObj.name });
+    console.log(imgs);
+    try {
+      const response = await productApi.postProduct(imgs);
+
+      // setVisible(false);
+      // fetchData();
+    } catch (error) {
+      if (error.response.data.message === "image is not allowed") {
+        message.error("Vui lòng chọn ảnh sản phẩm")
+      }
+    }
   };
 
   const handleCancel = () => {
@@ -111,15 +124,49 @@ const ProductAdminPage = () => {
     setFilterCategory(value);
   };
 
-  const filteredProducts = Data.filter(
+  const filteredProducts = products.filter(
     (product) =>
-      filterCategory === "" || product.category === filterCategory
+      filterCategory === "" || product.category.name === filterCategory
   );
+
+  const openAddForm = () => {
+    const maxId = Math.max(...products.map(product => product.id));
+    form.setFieldsValue({
+      id: maxId + 1,
+      name: '',
+      price: '',
+      quantity: '',
+      image: [],
+      description: ''
+    });
+    setVisible(true);
+  };
+
+  const handleRender = (__, img, _, action) => {
+    let imgUploadUrl;
+    if (!img.url) {
+      imgUploadUrl = URL.createObjectURL(img.originFileObj);
+    }
+
+    return (
+      <div className="img-item">
+        <Image
+          rootClassName="modal-preview-img"
+          className="img"
+          src={img?.thumb?.url || img?.url || imgUploadUrl}
+          preview={{
+            src: img?.url,
+          }}
+          alt={img?.name}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className="admin-page-product">
       <div className="container">
-        <Button onClick={() => setVisible(true)}>Add Product</Button>
+        <Button onClick={() => openAddForm()}>Add Product</Button>
         <Select
           style={{ width: 200, marginBottom: 16 }}
           placeholder="Filter by Category"
@@ -127,9 +174,7 @@ const ProductAdminPage = () => {
           value={filterCategory}
         >
           <Select.Option value="">All</Select.Option>
-          <Select.Option value="Category 1">Category 1</Select.Option>
-          <Select.Option value="Category 2">Category 2</Select.Option>
-          <Select.Option value="Category 3">Category 3</Select.Option>
+          {categories.map((category) => (<Select.Option value={category.name}>{category.name}</Select.Option>))}
         </Select>
         <Table columns={columns} dataSource={filteredProducts} />
         <Modal
@@ -139,8 +184,14 @@ const ProductAdminPage = () => {
           onCancel={handleCancel}
         >
           <Form form={form}>
-            <Form.Item label="ID" name="id">
-              <Input disabled />
+            <Form.Item label="ID" name="categoryId">
+              <Input />
+              {/* <Select
+                style={{ width: 200, marginBottom: 16 }}
+                placeholder="Filter by Category"
+                onChange={handleCategoryChange}
+                value={filterCategory}
+              /> */}
             </Form.Item>
             <Form.Item label="Name" name="name">
               <Input />
@@ -148,20 +199,34 @@ const ProductAdminPage = () => {
             <Form.Item label="Price" name="price">
               <Input />
             </Form.Item>
-            <Form.Item label="Quantity" name="quantity">
+            <Form.Item label="Seller" name="seller">
               <Input />
             </Form.Item>
-            <Form.Item label="Color" name="color">
-              <Checkbox.Group>
-                <Checkbox value="Red">Red</Checkbox>
-                <Checkbox value="Blue">Blue</Checkbox>
-                <Checkbox value="Green">Green</Checkbox>
-                <Checkbox value="Yellow">Yellow</Checkbox>
-              </Checkbox.Group>
+            <Form.Item label="Quantity" name="ratings">
+              <Input />
             </Form.Item>
             <Form.Item label="Image" name="image">
-              <Upload beforeUpload={handleUpload} accept="image/*" multiple={true} maxCount={20}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Upload
+                beforeUpload={() => false}
+                name={`child_${name}`}
+                className="upload"
+                listType="picture-card"
+                itemRender={handleRender}
+                accept="image/png, image/jpeg"
+                multiple
+                onChange={({ fileList }) => {
+                  // Get the url of each file
+                  const imageUrls = fileList.map(file => file.response.url);
+                  // Now you can set the imageUrls to your form or state
+                  form.setFieldsValue({ image: imageUrls });
+                }}
+              ><div className="btn-upload">
+                  <PlusOutlined className="fz-25" />
+                  <span className="btn-text fz-11 sub-color-text">
+                    Upload
+                  </span>
+
+                </div>
               </Upload>
             </Form.Item>
             <Form.Item label="Description" name="description">
@@ -185,16 +250,8 @@ const ProductAdminPage = () => {
             <Form.Item label="Price" name="price">
               <Input />
             </Form.Item>
-            <Form.Item label="Quantity" name="quantity">
+            <Form.Item label="Quantity" name="stock">
               <Input />
-            </Form.Item>
-            <Form.Item label="Color" name="color">
-              <Checkbox.Group>
-                <Checkbox value="Red">Red</Checkbox>
-                <Checkbox value="Blue">Blue</Checkbox>
-                <Checkbox value="Green">Green</Checkbox>
-                <Checkbox value="Yellow">Yellow</Checkbox>
-              </Checkbox.Group>
             </Form.Item>
             <Form.Item label="Image" name="image">
               <Upload beforeUpload={handleUpload} accept="image/*" multiple={true} maxCount={20}>
@@ -208,7 +265,7 @@ const ProductAdminPage = () => {
         </Modal>
       </div>
 
-    </div>
+    </div >
   );
 };
 
