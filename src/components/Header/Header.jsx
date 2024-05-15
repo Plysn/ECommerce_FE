@@ -11,7 +11,6 @@ const NavItems = () => {
   const [username, setUserName] = useState("");
   const [avatar, setAvatar] = useState("");
   const navigate = useNavigate();
-  const [user, setUser] = useState("");
   const handleProfile = () => {
     navigate("/profile");
   };
@@ -29,12 +28,27 @@ const NavItems = () => {
     }
   });
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("access_token");
+    navigate("/");
+  };
+
+  let storedUser;
+  const userFromStorage = localStorage.getItem("user");
+  console.log(userFromStorage);
+  if (userFromStorage !== "undefined" && userFromStorage !== null) {
+    storedUser = JSON.parse(userFromStorage);
+  } else {
+    console.log("No user data in local storage");
+  }
+
   return (
     <header
-      className={`header-section style-4 ${headerFiexd ? "header-fixed fadeInUp" : ""
-        }`}
+      className={`header-section style-4 ${
+        headerFiexd ? "header-fixed fadeInUp" : ""
+      }`}
     >
-
       {/* ---header botton starts */}
       <div className="header-bottom">
         <div className="container">
@@ -74,10 +88,10 @@ const NavItems = () => {
               </div>
 
               {/* users when user available */}
-              {!user.access_token ? (
+              {storedUser ? (
                 <>
                   <div>
-                    {user?.avatar ? (
+                    {storedUser?.avatar ? (
                       <>
                         <img src={avatar} className="nav-profile" />
                       </>
@@ -89,12 +103,14 @@ const NavItems = () => {
                     )}
                   </div>
                   <NavDropdown>
-                    <NavDropdown.Item>Hi! {user?.username}</NavDropdown.Item>
+                    <NavDropdown.Item>
+                      Hi! {storedUser?.username}
+                    </NavDropdown.Item>
                     <NavDropdown.Item onClick={handleProfile}>
                       Profile
                     </NavDropdown.Item>
 
-                    {user?.isAdmin && (
+                    {storedUser?.isAdmin && (
                       <NavDropdown.Item onClick={handleAdmin}>
                         Admin
                       </NavDropdown.Item>
@@ -103,7 +119,9 @@ const NavItems = () => {
                       Order
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item>Logout</NavDropdown.Item>
+                    <NavDropdown.Item onClick={handleLogout}>
+                      Logout
+                    </NavDropdown.Item>
                   </NavDropdown>
                 </>
               ) : (

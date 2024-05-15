@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Banner from "./Banner";
 import HomeCategory from "./HomeCategory";
 import AppSection from "./AppSection";
@@ -7,7 +7,6 @@ import productApi from "../../services/product";
 import { message } from "antd";
 
 function Home() {
-
   const [products, setProducts] = useState([]);
 
   useEffect(() => {

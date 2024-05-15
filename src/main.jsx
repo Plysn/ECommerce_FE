@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -24,6 +23,7 @@ import SingleBlog from "./pages/Blog/SingleBlog.jsx";
 import CheckoutPage from "./pages/Shop/CheckoutPage.jsx";
 import Shop from "./pages/Shop/Shop.jsx";
 import SingleProduct from "./pages/Shop/SingleProduct.jsx";
+import PrivateRoute from "./PrivateRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -48,28 +48,36 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart-page",
-        element: <CartPage />,
+        element: (
+          // <PrivateRoute roles={["user", "admin"]}>
+          <CartPage />
+          // </PrivateRoute>
+        ),
       },
       {
         path: "/admin",
-        element: <ProductAdminPage />
+        element: (
+          <PrivateRoute roles={["admin"]}>
+            <ProductAdminPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/profile",
-        element: <Profile />
-      },
-      {
-        path: "/check-out",
-        element: <CheckoutPage />
+        element: (
+          // <PrivateRoute roles={["user", "admin"]}>
+          <Profile />
+          // </PrivateRoute>
+        ),
       },
       {
         path: "/shop",
-        element: <Shop />
+        element: <Shop />,
       },
       {
         path: "/single-product",
-        element: <SingleProduct />
-      }
+        element: <SingleProduct />,
+      },
     ],
   },
   {

@@ -1,35 +1,80 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import authApi from "../../services/auth";
+import { message } from "antd";
 
 const title = "Sign In";
 const socialTitle = "Login With Social Media";
-const btnText = "Submit Now";
 
 const SignIn = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSignIn = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await authApi.signin({
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        console.log(response);
+        localStorage.setItem("user", JSON.stringify(response.data.data.user));
+        localStorage.setItem(
+          "access_token",
+          JSON.stringify(response.data.data.access_token)
+        );
+        message.success("Đăng nhập thành công!");
+        navigate("/");
+      }
+    } catch (error) {
+      message.error("Đăng nhập thất bại! Vui lòng thử lại.");
+      if (error.response) {
+        if (error.response.status === 404 || error.response.status === 402) {
+          setErrorMessage("Mật khẩu không hợp lệ! Vui lòng thử lại.");
+        }
+        if (error.response.status === 422) {
+          setErrorMessage("Email không hợp lệ! Vui lòng thử lại.");
+        }
+      } else {
+        console.error("Error making request:", error);
+      }
+    }
+  };
+
   return (
     <div>
-      <img src="https://accgroup.vn/wp-content/uploads/2023/01/tmdt.jpg.webp"
+      <img
+        src="https://accgroup.vn/wp-content/uploads/2023/01/tmdt.jpg.webp"
         alt="Background"
         style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: '-1',
-          filter: 'blur(4px)'
-        }} />
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: "-1",
+          filter: "blur(4px)",
+        }}
+      />
       <div className="login-section padding-tb">
         <div className="container">
           <div className="account-wrapper">
             <h3 className="title">{title}</h3>
 
-            <form className="account-form">
+            <form className="account-form" onSubmit={handleSignIn}>
               <div className="form-group">
                 <input
                   type="email"
                   name="email"
                   placeholder="Email Address *"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -38,24 +83,19 @@ const SignIn = () => {
                   type="password"
                   name="password"
                   placeholder="Password *"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-
-              <div className="form-group">
-                <div className="d-flex justify-content-between flex-wrap pt-sm-2">
-                  <div className="checkgroup">
-                    <input type="checkbox" name="remember" id="remember" />
-                    <label htmlFor="remember">Remember Me</label>
+              {/* showing error message */}
+              <div>
+                {errorMessage && (
+                  <div className="error-message text-danger">
+                    {errorMessage}
                   </div>
-                  <Link to="/forgetpass">Forget Password?</Link>
-                </div>
+                )}
               </div>
-
-              <div className="form-group text-center">
-                <button className="d-block lab-btn">
-                  <span>{btnText}</span>
-                </button>
-              </div>
+              <button type="submit">Sign In</button>
             </form>
             <div className="account-bottom">
               <span className="d-block cate pt-10">

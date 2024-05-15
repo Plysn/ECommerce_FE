@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, message } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from "react";
+import { Form, Modal, Skeleton, message } from "antd";
+import { EyeOutlined } from "@ant-design/icons";
 import "../../assets/css/profile.css";
+import usersApi from "../../services/users";
 
 const Profile = () => {
   const [user, setUser] = useState({
-    name: 'User Name',
-    email: 'user@example.com',
+    name: "User Name",
+    email: "user@example.com",
   });
 
   const [changeInfoAble, setChangeInfoAble] = useState(false);
@@ -14,10 +15,20 @@ const Profile = () => {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("user");
+    if (storedUserId) {
+      const parsedUser = JSON.parse(storedUserId);
+      setUserId(parsedUser.id);
+    }
+  }, []);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -35,13 +46,12 @@ const Profile = () => {
     setConfirmPassword(event.target.value);
   };
 
-
   const togglePasswordVisibility1 = () => {
     setShowPassword1(!showPassword1);
   };
 
   const togglePasswordVisibility2 = () => {
-    setShowPassword2(!showPassword2);
+    setShowPassword2(!showPassword252);
   };
 
   const togglePasswordVisibility3 = () => {
@@ -56,55 +66,76 @@ const Profile = () => {
     setPasswordMismatch(newPassword !== confirmPassword);
   }, [newPassword, confirmPassword]);
 
-  const handleOk = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await usersApi.getUserInfo(userId);
+        setUserInfo(response.data.data);
+      } catch (error) {
+        message.error(error);
+      }
+    };
 
-  };
+    fetchData();
+  }, [userId]);
+
+  const handleOk = () => {};
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
 
   const handleInputChange = (event) => {
     if (changeInfoAble) {
       setChangeInfoAble(false);
       setUser({
         ...user,
-        [event.target.name]: event.target.value,
+        [event.target.fullname]: event.target.value,
       });
-    }
-    else {
+    } else {
       setChangeInfoAble(true);
-
     }
   };
 
-  const handleSubmit = () => {
-  };
-
-  console.log("changeInfoAble", changeInfoAble);
+  const handleSubmit = () => {};
 
   return (
-    <div class="container-fluid overcover">
-      <div class="container profile-box">
-        <div id="about" class="home row">
-          <div class="image-box">
-            <img src="https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.668xw:1.00xh;0.119xw,0&resize=1200:*" alt="avt-user" />
+    <div className="container-fluid overcover">
+      <div className="container profile-box">
+        <div id="about" className="home row">
+          <div className="image-box">
+            <img
+              src="https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.668xw:1.00xh;0.119xw,0&resize=1200:*"
+              alt="avt-user"
+            />
           </div>
         </div>
-        <div class="basic-detail row">
-          <div class="col-md-8 detail-col">
+        <div className="basic-detail row">
+          <div className="col-md-8 detail-col">
             <h2>Nguyen Thi Phuong Ly</h2>
-            <div class="btn-cover">
-              <button class="btn btn-success" onClick={() => handleInputChange()}>
-                {changeInfoAble ? <span>Lưu thay đổi</span> : <span>Chỉnh sửa thông tin</span>
-                }
+            <div className="btn-cover">
+              <button
+                className="btn btn-success"
+                onClick={() => handleInputChange()}
+              >
+                {changeInfoAble ? (
+                  <span>Lưu thay đổi</span>
+                ) : (
+                  <span>Chỉnh sửa thông tin</span>
+                )}
               </button>
-              <button class="btn btn-success" onClick={showModal}>Thay đổi mật khẩu</button>
+              <button className="btn btn-success" onClick={showModal}>
+                Thay đổi mật khẩu
+              </button>
 
-              <Modal title="Thay đổi mật khẩu" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+              <Modal
+                title="Thay đổi mật khẩu"
+                visible={isModalVisible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+              >
                 <form name="changePassword">
-                  <table class="change-password-list">
+                  <table className="change-password-list">
                     <tbody>
                       <tr>
                         <th>Mật khẩu cũ</th>
@@ -145,132 +176,173 @@ const Profile = () => {
                       </tr>
                     </tbody>
                   </table>
-                  {passwordMismatch && <span style={{ color: "red", padding: "13px 10px" }}>Mật khẩu mới không trùng khớp!</span>}
+                  {passwordMismatch && (
+                    <span style={{ color: "red", padding: "13px 10px" }}>
+                      Mật khẩu mới không trùng khớp!
+                    </span>
+                  )}
                 </form>
               </Modal>
             </div>
           </div>
-
         </div>
-
-
-        <section id="profile" class="home-dat">
-          <div class="row no-margin home-det">
-
-            <div class="col-md-12 home-dat">
-              <div class="jumbo-address">
-                <div class="row no-margin">
-                  <div class="col-lg-12 no-padding">
-                    <form name="profile" visiable={changeInfoAble}>
-
-                      <table class="addrss-list">
-                        <tbody>
-                          <tr>
-                            <th>Họ và tên</th>
-                            <td> <input
-                              type="name"
-                              name="name"
-                              placeholder="Họ và tên *"
-                              disabled={!changeInfoAble}
-                            /> </td>
-                          </tr>
-                          <tr>
-                            <th>Email</th>
-                            <td><input
-                              type="email"
-                              name="email"
-                              placeholder="Email *"
-                              disabled={!changeInfoAble}
-                            /> </td>
-                          </tr>
-                          <tr>
-                            <th>Số điện thoại</th>
-                            <td> <input
-                              type="phone"
-                              name="phone"
-                              placeholder="Phone *"
-                              disabled={!changeInfoAble}
-                            /> </td>
-                          </tr>
-                          <tr>
-                            <th>Địa chỉ giao hàng</th>
-                            <td>
-                              <select disabled={!changeInfoAble} style={{ marginBottom: 10 }}>
-                                <option value="volvo">Hà Nội</option>
-                                <option value="saab">Hồ Chí Minh</option>
-                                <option value="saab">Đà Nẵng</option>
-                                <option value="saab">Khác</option>
-                              </select>
-                              <select disabled={!changeInfoAble} style={{ marginBottom: 10 }}>
-                                <option value="volvo">Đống Đa</option>
-                                <option value="saab">Thanh Xuân</option>
-                                <option value="saab">Hai Bà Trưng</option>
-                                <option value="saab">Ba Đình</option>
-                                <option value="saab">Hoang Mai</option>
-                              </select>
-                              <select disabled={!changeInfoAble} style={{ marginBottom: 10 }}>
-                                <option value="volvo">Bách Khoa</option>
-                                <option value="saab">Bạch Mai</option>
-                                <option value="saab">Thanh Nhàn</option>
-                                <option value="saab">Phố Huế</option>
-                                <option value="saab">Lê Đại Hành</option>
-                              </select>
-                              <input
-                                type="address"
-                                name="address"
-                                placeholder="Street *"
-
-                                disabled={!changeInfoAble}
-                              /> </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </form>
+        {userInfo ? (
+          <section id="profile" className="home-dat">
+            <div className="row no-margin home-det">
+              <div className="col-md-12 home-dat">
+                <div className="jumbo-address">
+                  <div className="row no-margin">
+                    <div className="col-lg-12 no-padding">
+                      <Form
+                        name="profile"
+                        visiable={changeInfoAble}
+                        initialValues={userInfo}
+                      >
+                        <table className="addrss-list">
+                          <tbody>
+                            <tr>
+                              <th>Họ và tên</th>
+                              <td>
+                                <input
+                                  type="name"
+                                  name="fullname"
+                                  placeholder="Họ và tên *"
+                                  disabled={!changeInfoAble}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Email</th>
+                              <td>
+                                <input
+                                  type="email"
+                                  name="email"
+                                  placeholder="Email *"
+                                  disabled={!changeInfoAble}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Số điện thoại</th>
+                              <td>
+                                <input
+                                  type="phone"
+                                  name="phone"
+                                  placeholder="Phone *"
+                                  disabled={!changeInfoAble}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Địa chỉ giao hàng</th>
+                              <td>
+                                <select
+                                  disabled={!changeInfoAble}
+                                  style={{ marginBottom: 10 }}
+                                >
+                                  <option value="volvo">Hà Nội</option>
+                                  <option value="saab">Hồ Chí Minh</option>
+                                  <option value="saab">Đà Nẵng</option>
+                                  <option value="saab">Khác</option>
+                                </select>
+                                <select
+                                  disabled={!changeInfoAble}
+                                  style={{ marginBottom: 10 }}
+                                >
+                                  <option value="volvo">Đống Đa</option>
+                                  <option value="saab">Thanh Xuân</option>
+                                  <option value="saab">Hai Bà Trưng</option>
+                                  <option value="saab">Ba Đình</option>
+                                  <option value="saab">Hoang Mai</option>
+                                </select>
+                                <select
+                                  disabled={!changeInfoAble}
+                                  style={{ marginBottom: 10 }}
+                                >
+                                  <option value="volvo">Bách Khoa</option>
+                                  <option value="saab">Bạch Mai</option>
+                                  <option value="saab">Thanh Nhàn</option>
+                                  <option value="saab">Phố Huế</option>
+                                  <option value="saab">Lê Đại Hành</option>
+                                </select>
+                                <input
+                                  type="address"
+                                  name="address"
+                                  placeholder="Street *"
+                                  disabled={!changeInfoAble}
+                                />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </Form>
+                    </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </section>
+        ) : (
+          <Skeleton />
+        )}
 
+        <section id="contact" className="contact-tab">
+          <div className="row no-margin">
+            <div className="col-md-6 no-padding">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3176144.0450019627!2d-107.79423426090409!3d38.97644533805396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x874014749b1856b7%3A0xc75483314990a7ff!2sColorado%2C+USA!5e0!3m2!1sen!2sin!4v1547222354537"
+                frameborder="0"
+                style={{ border: 0 }}
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div className="col-md-6">
+              <div className="row cont-row no-margin">
+                <div className="col-sm-6">
+                  <input
+                    placeholder="Enter Full Name"
+                    type="text"
+                    className="form-control form-control-sm"
+                  />
+                </div>
+                <div className="col-sm-6">
+                  <input
+                    placeholder="Enter Email Address"
+                    type="text"
+                    className="form-control form-control-sm"
+                  />
+                </div>
+              </div>
+              <div className="row cont-row no-margin">
+                <div className="col-sm-6">
+                  <input
+                    placeholder="Enter Mobile Number"
+                    type="text"
+                    className="form-control form-control-sm"
+                  />
+                </div>
+              </div>
+              <div className="row cont-row no-margin">
+                <div className="col-sm-12">
+                  <textarea
+                    placeholder="Enter your Message"
+                    className="form-control form-control-sm"
+                    rows="10"
+                  ></textarea>
+                </div>
+              </div>
+              <div className="row cont-row no-margin">
+                <div className="col-sm-6">
+                  <button className="btn btn-sm btn-success">
+                    Send Message
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </section>
-
-        <section id="contact" class="contact-tab">
-          <div class="row no-margin">
-            <div class="col-md-6 no-padding">
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3176144.0450019627!2d-107.79423426090409!3d38.97644533805396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x874014749b1856b7%3A0xc75483314990a7ff!2sColorado%2C+USA!5e0!3m2!1sen!2sin!4v1547222354537" frameborder="0" style={{ border: 0 }} allowfullscreen></iframe>
-            </div>
-            <div class="col-md-6">
-              <div class="row cont-row no-margin">
-                <div class="col-sm-6">
-                  <input placeholder="Enter Full Name" type="text" class="form-control form-control-sm" />
-                </div>
-                <div class="col-sm-6">
-                  <input placeholder="Enter Email Address" type="text" class="form-control form-control-sm" />
-                </div>
-              </div>
-              <div class="row cont-row no-margin">
-                <div class="col-sm-6">
-                  <input placeholder="Enter Mobile Number" type="text" class="form-control form-control-sm" />
-                </div>
-
-              </div>
-              <div class="row cont-row no-margin">
-                <div class="col-sm-12">
-                  <textarea placeholder="Enter your Message" class="form-control form-control-sm" rows="10"></textarea>
-                </div>
-
-              </div>
-              <div class="row cont-row no-margin">
-                <div class="col-sm-6">
-                  <button class="btn btn-sm btn-success">Send Message</button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </section>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 

@@ -1,50 +1,102 @@
-import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-// import GoogleLogin from 'react-google-login';
-// import { Button } from "antd";
-// import { ReactComponent as IconGoogle } from '../../assets/images/logo/google.svg';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import authApi from "../../services/auth";
+import { message } from "antd";
 
 const title = "Register Now";
-const socialTitle = "Register With Social Media";
-const btnText = "Get Started Now";
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
-
-  const location = useLocation();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+
+  const handleSignUp = async (event) => {
+    event.preventDefault();
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await authApi.signup({
+        username,
+        email,
+        password,
+        confirmPassword,
+      });
+
+      if (response.status === 200) {
+        message.success("Đăng ký tài khoản thành công!");
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      message.error("Đăng ký tài khoản thất bại! Vui lòng thử lại.");
+      if (error.response.status === 404) {
+        setErrorMessage("Email đã được sử dụng! Vui lòng chọn email khác.");
+      }
+      if (error.response.status === 422) {
+        setErrorMessage("Vui lòng nhập mật khẩu có ít nhất 8 ký tự.");
+      }
+    }
+  };
 
   return (
     <div>
-      <img src="https://accgroup.vn/wp-content/uploads/2023/01/tmdt.jpg.webp"
+      <img
+        src="https://accgroup.vn/wp-content/uploads/2023/01/tmdt.jpg.webp"
         alt="Background"
         style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: '-1',
-          filter: 'blur(4px)'
-        }} />
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: "-1",
+          filter: "blur(4px)",
+        }}
+      />
       <div className="login-section padding-tb">
         <div className="container">
           <div className="account-wrapper">
             <h3 className="title">{title}</h3>
-            <form className="account-form">
+            <form className="account-form" onSubmit={handleSignUp}>
               <div className="form-group">
-                <input type="text" name="username" placeholder="UserName" />
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="UserName"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </div>
               <div className="form-group">
-                <input type="email" name="email" placeholder="Email" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
               <div className="form-group">
-                <input type="password" name="password" placeholder="Password" />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
               <div className="form-group">
                 <input
                   type="password"
                   name="confirmPassword"
                   placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
               {/* showing error message */}
@@ -55,11 +107,7 @@ const SignUp = () => {
                   </div>
                 )}
               </div>
-              <div className="form-group">
-                <button className="lab-btn">
-                  <span>{btnText}</span>
-                </button>
-              </div>
+              <button type="submit">Sign Up</button>
             </form>
             <div className="account-bottom">
               <span className="d-block cate pt-10">
@@ -98,8 +146,8 @@ const SignUp = () => {
             </div>
           </div>
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
