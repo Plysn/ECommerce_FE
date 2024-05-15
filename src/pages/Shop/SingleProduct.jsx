@@ -5,29 +5,18 @@ import BreadCrumb from "../../components/Breadcrumb/BreadCrumb";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Navigation } from "swiper/modules";
-// import Review from "../../components/Review/Review";
-// import MostPopularPost from "../blog/MostPopularPost";
-// import ProductDisplay from "./ProductDisplay";
-import axios from "axios";
-
+import Review from "../../components/Review/Review";
+import MostPopularPost from "../blog/MostPopularPost";
+import ProductDisplay from "./ProductDisplay";
+import Data from "../../data/products.json";
 const SingleProduct = () => {
-  const [result, setResult] = useState([]);
+  const [product, setProduct] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    async function get_data() {
-      try {
-        console.log(id);
-        const rep = await axios.get(`/api/product/get-details/${id}`);
+    setProduct(Data);
+  }, []);
 
-        setResult([rep.data.data])
-        console.log(rep)
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-      }
-    }
-    get_data();
-
-  }, [id]);
+  const result = product.filter((p) => p.id === id);
   return (
     <div>
       <BreadCrumb title={"OUR SHOP SINGLE"} curPage={"Shop / Single Product"} />
@@ -76,11 +65,11 @@ const SingleProduct = () => {
                     </div>
                     <div className="col-md-6 col-12">
                       <div className="post-content">
-                        {/* <div>
+                        <div>
                           {result.map((item) => (
                             <ProductDisplay item={item} key={item.id} />
                           ))}
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                   </div>
