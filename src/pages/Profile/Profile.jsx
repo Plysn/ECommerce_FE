@@ -15,12 +15,16 @@ const Profile = () => {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
+
+  const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
   const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("user");
@@ -51,7 +55,7 @@ const Profile = () => {
   };
 
   const togglePasswordVisibility2 = () => {
-    setShowPassword2(!showPassword252);
+    setShowPassword2(!showPassword2);
   };
 
   const togglePasswordVisibility3 = () => {
@@ -79,7 +83,23 @@ const Profile = () => {
     fetchData();
   }, [userId]);
 
-  const handleOk = () => {};
+  console.log(oldPassword);
+
+  const handleOk = async () => {
+    try {
+      const response = await usersApi.updatePassword(userId, {
+        oldPassword,
+        newPassword,
+        confirmPassword
+      });
+      console.log(response);
+    } catch (error) {
+      if (error.response.status === 422) {
+        setErrorMessage("Mật khẩu cũ không chính xác! Vui lòng thử lại.");
+      }
+    }
+  };
+
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -97,7 +117,7 @@ const Profile = () => {
     }
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => { };
 
   return (
     <div className="container-fluid overcover">
@@ -144,6 +164,7 @@ const Profile = () => {
                             type={showPassword1 ? "text" : "password"}
                             name="older-password"
                             placeholder="Mật khẩu cũ *"
+                            onChange={(e) => setOldPassword(e.target.value)}
                           />
                           <EyeOutlined onClick={togglePasswordVisibility1} />
                         </td>
@@ -180,6 +201,11 @@ const Profile = () => {
                     <span style={{ color: "red", padding: "13px 10px" }}>
                       Mật khẩu mới không trùng khớp!
                     </span>
+                  )}
+                  {errorMessage && (
+                    <div style={{ color: "red", padding: "13px 10px" }}>
+                      {errorMessage}
+                    </div>
                   )}
                 </form>
               </Modal>
