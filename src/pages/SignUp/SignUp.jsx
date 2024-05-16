@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authApi from "../../services/auth";
-import { message } from "antd";
+import { Button, message } from "antd";
+import GoogleLogin from "react-google-login";
+import { IconGoogle } from "../../assets/icons";
 
 const title = "Register Now";
 
@@ -120,7 +122,7 @@ const SignUp = () => {
               <span className="or">
                 <span>or</span>
               </span>
-              <button className="google-signin-btn">
+              {/* <button className="google-signin-btn">
                 <svg
                   width="24"
                   height="24"
@@ -146,7 +148,23 @@ const SignUp = () => {
                   />
                 </svg>
                 Sign in with Google
-              </button>
+              </button> */}
+              <GoogleLogin
+                // clientId={process.env.REACT_APP_CLIENT_ID_OAUTH2}
+                render={(renderProps) => (
+                  <Button
+                    htmlType="submit"
+                    icon={<IconGoogle className="login-form-button-icon" />}
+                    className="login-form-button login-form-button-google fz-16"
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                  >
+                    Sign in with Google
+                  </Button>
+                )}
+                buttonText="Sign in with Google"
+                cookiePolicy="single_host_origin"
+              />
             </div>
           </div>
         </div>
