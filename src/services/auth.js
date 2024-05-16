@@ -7,6 +7,9 @@ const authApi = {
   signup(params) {
     return api.post("/auth/sign-up", params);
   },
+  forgotPassword(params) {
+    return api.post("/auth/forgot-password", params);
+  }
 };
 
 export default authApi;

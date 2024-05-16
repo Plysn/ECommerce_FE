@@ -97,7 +97,7 @@ const router = createBrowserRouter([
     path: "/sign-up",
     element: <SignUp />,
   },
-  { path: "forgetpass", element: <ResetPassword /> },
+  { path: "/forgetpass", element: <ResetPassword /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

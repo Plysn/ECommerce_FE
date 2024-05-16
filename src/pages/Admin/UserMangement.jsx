@@ -24,7 +24,13 @@ const UserMangement = () => {
       const response = await usersApi.getListUsers();
       setUsersData(response.data.data);
     } catch (error) {
-      message.error(error);
+      if (error.response.message === "Unauthorized") {
+        message.error("You are not authorized to view this page! Please login again");
+
+      }
+      else {
+        message.error("An error occurred while fetching products");
+      }
     }
   };
 

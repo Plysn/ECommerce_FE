@@ -24,10 +24,11 @@ const SignIn = () => {
       });
 
       if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(response.data.data.user));
+        console.log(response.data);
+        localStorage.setItem("user", JSON.stringify(response.data.data));
         localStorage.setItem(
           "access_token",
-          JSON.stringify(response.data.data.access_token)
+          JSON.stringify(response.data.access_token)
         );
         message.success("Đăng nhập thành công!");
         navigate("/");
@@ -42,7 +43,7 @@ const SignIn = () => {
           setErrorMessage("Email không hợp lệ! Vui lòng thử lại.");
         }
       } else {
-        console.error("Error making request:", error);
+        console.log("Error making request:", error);
       }
     }
   };
@@ -101,6 +102,9 @@ const SignIn = () => {
               </div>
             </form>
             <div className="account-bottom">
+              <span className="d-block cate pt-10 pb-10">
+                <Link to="/forgetpass">Forget Password</Link>
+              </span>
               <span className="d-block cate pt-10">
                 Don&apos;t Have any Account? <Link to="/sign-up">Sign Up</Link>
               </span>

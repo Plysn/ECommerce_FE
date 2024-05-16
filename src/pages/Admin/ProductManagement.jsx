@@ -142,7 +142,7 @@ const ProductAdminPage = () => {
         return img.originFileObj.name;
       });
     }
-    values.image = imgs;
+    values.img = ["12312313.jpg"];
     console.log(values);
 
     try {

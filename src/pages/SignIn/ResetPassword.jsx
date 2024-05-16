@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import authApi from "../../services/auth";
 
 import "../../assets/css/signin.css"
 
@@ -11,14 +12,14 @@ function ResetPassword() {
 
   const onFinish = async ({ email }) => {
     try {
-      const res = await authApi.resetPassword({
+      const res = await authApi.forgotPassword({
         email,
       });
       if (res) {
         setSuccess(true);
       }
     } catch (error) {
-      if (error?.response?.data?.code === 'not_found_email') {
+      if (error?.response?.data?.status === 422) {
         message.error("Vui lòng kiểm tra lại email");
       } else {
         message.error("Vui lòng kiểm tra lại email");
@@ -47,7 +48,7 @@ function ResetPassword() {
         >
           {success ? (
             <>
-              Vui lòng kiểm tra email của bạn để cài đặt lại mật khẩu
+              Please check your email to reset your password
             </>
           ) : (
             <>
@@ -55,7 +56,7 @@ function ResetPassword() {
                 Forget Password
               </h1>
               <ul className=" list-message">
-                Nhập vào email của bạn để nhận được hướng dẫn cài đặt lại mật khẩu
+                Enter your email to receive password reset instructions
               </ul>
               <Form.Item
                 rules={[
@@ -63,7 +64,7 @@ function ResetPassword() {
                 name="email"
                 className="form-group"
               >
-                <input
+                <Input
                   name="password"
                   className="form-group"
                   type="email"

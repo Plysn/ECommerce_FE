@@ -19,7 +19,13 @@ const OrderManagement = () => {
       const response = await orderApi.getOrders();
       setOrdersData(response.data.data);
     } catch (error) {
-      message.error(error);
+      if (error.response.message === "Unauthorized") {
+        message.error("You are not authorized to view this page! Please login again");
+
+      }
+      else {
+        message.error("An error occurred while fetching products");
+      }
     }
   };
 
@@ -31,6 +37,13 @@ const OrderManagement = () => {
       setIsModalVisible(true);
     } catch (error) {
       console.log(error);
+      if (error.response.message === "Unauthorized") {
+        message.error("You are not authorized to view this page! Please login again");
+
+      }
+      else {
+        message.error("An error occurred while fetching products");
+      }
     }
   };
   const handleOkDetails = () => {
