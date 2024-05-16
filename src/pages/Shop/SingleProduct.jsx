@@ -8,15 +8,35 @@ import { Navigation } from "swiper/modules";
 import Review from "../../components/Review/Review";
 import MostPopularPost from "../Blog/MostPopularPost";
 import ProductDisplay from "./ProductDisplay";
-import Data from "../../data/products.json";
-const SingleProduct = () => {
-  const [product, setProduct] = useState([]);
-  const { id } = useParams();
-  useEffect(() => {
-    setProduct(Data);
-  }, []);
+// import Data from "../../data/products.json";
+import axios from "axios";
+// import { Result } from "antd";
 
-  const result = product.filter((p) => p.id === id);
+
+//import { serverUrl } from '.../backend'
+// const serverUrl = 'http://localhost:3002'
+
+
+const SingleProduct = () => {
+  const { id } = useParams();
+  const [result, setResult] = useState([]);
+  useEffect(() => {
+    async function get_data() {
+      try {
+        console.log(id);
+        const rep = await axios.get(`https://ecommercebackend-production-4f03.up.railway.app/api/products/${id}`);
+       
+        setResult([rep.data.data])
+        console.log(rep)
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    }
+    get_data();
+   
+  }, [id]);
+
+
   return (
     <div>
       <BreadCrumb title={"OUR SHOP SINGLE"} curPage={"Shop / Single Product"} />
@@ -43,7 +63,7 @@ const SingleProduct = () => {
                               <SwiperSlide key={i}>
                                 <div className="single-thumb">
                                   <img src={item.img} alt="" />
-                                </div>
+                                </div>  
                               </SwiperSlide>
                             ))}
                             {result.map((item, i) => (
@@ -75,6 +95,7 @@ const SingleProduct = () => {
                   </div>
                 </div>
 
+
                 <div className="review">
                   <Review />
                 </div>
@@ -93,4 +114,6 @@ const SingleProduct = () => {
   );
 };
 
+
 export default SingleProduct;
+
