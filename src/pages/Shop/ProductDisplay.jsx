@@ -1,10 +1,29 @@
-// /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-const desc =
-  "Energistia an deliver atactica metrcs after avsionary Apropria trnsition enterpris an sources applications emerging 	psd template.";
+import axios from "axios"; // Import Axios
 
-const ProductDisplay = ({ item }) => {
+const defaultDescription = "Energistia can deliver tactical metrics after visionary Appropriating transition enterpris an sources applications emerging psd template.";
+const axiosInstance = axios.create({
+  baseURL: 'https://ecommercebackend-production-4f03.up.railway.app/api',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+
+// Thiết lập một interceptor để thêm Bearer Token vào mỗi yêu cầu
+axiosInstance.interceptors.request.use(config => {
+  const token = JSON.parse(localStorage.getItem('access_token'));
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
+
+const ProductDisplay = ({ item, token }) => {
   const { id, img, price, name, seller, quantity, description } = item;
   const [prequantity, setQuantity] = useState(quantity);
   const [coupon, setCoupon] = useState("");
@@ -29,47 +48,26 @@ const ProductDisplay = ({ item }) => {
     setColor(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create an object representing the product to be added to the cart
-    const product = {
-      id: id,
-      img: img,
-      name: name,
-      price: price,
-      quantity: prequantity,
-      size: size,
-      color: color,
-      coupon: coupon,
-    };
+ 
 
-    // Retrieve existing cart items from local storage or initialize an empty array
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    try {
+      const a= await axiosInstance.post(`/carts/add/${id}`);
+        console.log('tu server ',a)
+      // Xử lý phản hồi nếu cần
+      // Ví dụ: Hiển thị thông báo thành công cho người dùng
 
-    // Check if the product with the same ID is already in the cart
-    const existingProductIndex = existingCart.findIndex(
-      (item) => item.id === id
-    );
-
-    if (existingProductIndex !== -1) {
-      // Product already in the cart; update quantity
-      existingCart[existingProductIndex].quantity += prequantity;
-    } else {
-      // Product not in the cart; add it
-      existingCart.push(product);
+      setQuantity(1);
+      setSize("Select Size");
+      setColor("Select Color");
+      setCoupon("");
+    } catch (error) {
+      console.error('Error adding item to cart:', error.message);
+      // Xử lý lỗi nếu cần
+      // Ví dụ: Hiển thị thông báo lỗi cho người dùng
     }
-
-    // Update the local storage with the updated cart items
-    localStorage.setItem("cart", JSON.stringify(existingCart));
-
-    // Reset form fields and quantity
-    setQuantity(1);
-    setSize("Select Size");
-    setColor("Select Color");
-    setCoupon("");
-
-    // You can add further logic, such as displaying a confirmation message.
   };
 
   return (
@@ -86,9 +84,8 @@ const ProductDisplay = ({ item }) => {
         </p>
         <h4>${price}</h4>
         <h6>{seller}</h6>
-        <p>{description || desc}</p>
+        <p>{description || defaultDescription}</p>
       </div>
-      {/* Single Product Cart Component here */}
       <div>
         <form onSubmit={handleSubmit}>
           <div className="cart-plus-minus">
@@ -118,13 +115,32 @@ const ProductDisplay = ({ item }) => {
             </select>
             <i className="icofont-rounded-down"></i>
           </div>
+          <div className="select-product color">
+            <select value={color} onChange={handleColorChange}>
+              <option>Select Color</option>
+              <option>Red</option>
+              <option>Blue</option>
+              <option>Green</option>
+              <option>Black</option>
+              <option>White</option>
+            </select>
+            <i className="icofont-rounded-down"></i>
+          </div>
+          <div className="coupon-field">
+            <input
+              type="text"
+              placeholder="Coupon Code"
+              value={coupon}
+              onChange={(e) => setCoupon(e.target.value)}
+            />
+          </div>
           <button type="submit" className="lab-btn">
             <span>Add To Cart</span>
           </button>
-
-          <Link to="/cart-page" className="lab-btn bg-primary">
+          {/* Thay thế Link bằng button để tránh chuyển hướng */}
+          <button className="lab-btn bg-primary" onClick={() => window.location.href="/cart-page"}>
             <span>Check Out</span>
-          </Link>
+          </button>
         </form>
       </div>
     </div>

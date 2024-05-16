@@ -82,6 +82,9 @@ const NavItems = () => {
                   <li>
                     <NavLink to="/contact">Contact</NavLink>
                   </li>
+                  <li>
+                    <NavLink to="/cart-page">Cart</NavLink>
+                  </li>
                 </ul>
               </div>
 

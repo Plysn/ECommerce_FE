@@ -8,13 +8,8 @@ import { Navigation } from "swiper/modules";
 import Review from "../../components/Review/Review";
 import MostPopularPost from "../Blog/MostPopularPost";
 import ProductDisplay from "./ProductDisplay";
-// import Data from "../../data/products.json";
 import axios from "axios";
-// import { Result } from "antd";
 
-
-//import { serverUrl } from '.../backend'
-// const serverUrl = 'http://localhost:3002'
 
 
 const SingleProduct = () => {
@@ -87,7 +82,7 @@ const SingleProduct = () => {
                       <div className="post-content">
                         <div>
                           {result.map((item) => (
-                            <ProductDisplay item={item} key={item.id} />
+                            <ProductDisplay item={item} key={item.id} token={localStorage.getItem('access_token')} />
                           ))}
                         </div>
                       </div>

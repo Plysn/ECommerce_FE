@@ -3,21 +3,54 @@ import BreadCrumb from "../../components/Breadcrumb/BreadCrumb";
 import { Link } from "react-router-dom";
 import delImgUrl from "../../assets/images/shop/del.png";
 import CheckoutPage from "./CheckoutPage";
-import { DownOutlined } from "@ant-design/icons";
+import axios from 'axios';
+
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
 
+
+  // Tạo một instance của axios
+  const axiosInstance = axios.create({
+    baseURL: 'https://ecommercebackend-production-4f03.up.railway.app/api',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+
+  // Thiết lập một interceptor để thêm Bearer Token vào mỗi yêu cầu
+  axiosInstance.interceptors.request.use(config => {
+    const token = JSON.parse(localStorage.getItem('access_token'));
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  }, error => {
+    return Promise.reject(error);
+  });
+
+
   useEffect(() => {
-    // Fetch cart items from local storage
-    const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCartItems);
+    fetchCartItems();
   }, []);
+
+
+  const fetchCartItems = async () => {
+    try {
+      const response = await axiosInstance.get('/carts');
+      setCartItems(response.data.data);
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+    }
+  };
+
 
   // Calculate the total price for each item in the cart
   const calculateTotalPrice = (item) => {
-    return item.price * item.quantity;
+    return parseFloat(item.price) * item.quantity;
   };
+
 
   // Handle quantity increase
   const handleIncrease = (item) => {
@@ -27,39 +60,55 @@ const CartPage = () => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   };
 
+
   // Handle quantity decrease
   const handleDecrease = (item) => {
     if (item.quantity > 1) {
       item.quantity -= 1;
       setCartItems([...cartItems]);
-
       // Update local storage with the new cart items
       localStorage.setItem("cart", JSON.stringify(cartItems));
     }
   };
 
-  // Handle item removal
-  const handleRemoveItem = (item) => {
-    // Filter out the item to be removed
-    const updatedCart = cartItems.filter((cartItem) => cartItem.id !== item.id);
-    // Update the state with the new cart
-    setCartItems(updatedCart);
-    // Update local storage with the updated cart
-    updateLocalStorage(updatedCart);
+
+  const handleRemoveItem = async (item) => {
+    try {
+      // Gửi yêu cầu DELETE đến API để xóa sản phẩm khỏi giỏ hàng
+     const a= await axiosInstance.delete(`/carts/delete/${item.product.id}`);
+      console.log('day la a: ',a,item )
+      // Filter out the item to be removed
+      const updatedCart = cartItems.filter((cartItem) => cartItem.id !== item.id);
+  
+      // Update the state with the new cart
+      setCartItems(updatedCart);
+  
+      // Update local storage with the updated cart
+      updateLocalStorage(updatedCart);
+  
+      console.log('Item successfully deleted from cart');
+    } catch (error) {
+      console.error('Error deleting item from cart:', error);
+    }
   };
+  
+
 
   // Update local storage with the cart items
   const updateLocalStorage = (cart) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   };
 
+
   // Calculate the cart subtotal
   const cartSubtotal = cartItems.reduce((total, item) => {
     return total + calculateTotalPrice(item);
   }, 0);
 
+
   // Calculate the order total
   const orderTotal = cartSubtotal;
+
 
   return (
     <div>
@@ -84,12 +133,12 @@ const CartPage = () => {
                     <tr key={indx}>
                       <td className="product-item cat-product">
                         <div className="p-thumb">
-                          <Link to="/shop-single">
-                            <img src={`${item.img}`} alt="" />
+                          <Link to={`/shop-single/${item.product.id}`}>
+                            <img src={item.product.img} alt={item.product.name} />
                           </Link>
                         </div>
                         <div className="p-content">
-                          <Link to="/shop-single">{item.name}</Link>
+                          <Link to={`/shop-single/${item.product.id}`}>{item.product.name}</Link>
                         </div>
                       </td>
                       <td className="cat-price">${item.price}</td>
@@ -106,6 +155,7 @@ const CartPage = () => {
                             type="text"
                             name="qtybutton"
                             value={item.quantity}
+                            readOnly
                           />
                           <div
                             className="inc qtybutton"
@@ -116,11 +166,11 @@ const CartPage = () => {
                         </div>
                       </td>
                       <td className="cat-toprice">
-                        ${calculateTotalPrice(item)}
+                        ${calculateTotalPrice(item).toFixed(2)}
                       </td>
                       <td className="cat-edit">
                         <a href="#" onClick={() => handleRemoveItem(item)}>
-                          <img src={delImgUrl} alt="" />
+                          <img src={delImgUrl} alt="Delete" />
                         </a>
                       </td>
                     </tr>
@@ -128,6 +178,7 @@ const CartPage = () => {
                 </tbody>
               </table>
             </div>
+
 
             {/* cart bottom */}
             <div className="cart-bottom">
@@ -151,6 +202,7 @@ const CartPage = () => {
                 </form>
               </div>
 
+
               {/* shopping box */}
               <div className="shiping-box">
                 <div className="row">
@@ -167,7 +219,7 @@ const CartPage = () => {
                           <option value="saab">Nepal</option>
                         </select>
                         <span className="select-icon">
-                          <DownOutlined />
+                          <i className="icofont-rounded-down"></i>
                         </span>
                       </div>
                       <div className="outline-select shipping-select">
@@ -179,7 +231,7 @@ const CartPage = () => {
                           <option value="saab">Kapasia</option>
                         </select>
                         <span className="select-icon">
-                          <DownOutlined />
+                          <i className="icofont-rounded-down"></i>
                         </span>
                       </div>
                       <input
@@ -192,6 +244,7 @@ const CartPage = () => {
                     </div>
                   </div>
 
+
                   {/* cart total */}
                   <div className="col-md-6 col-12">
                     <div className="cart-overview">
@@ -199,7 +252,7 @@ const CartPage = () => {
                       <ul className="lab-ul">
                         <li>
                           <span className="pull-left">Cart Subtotal</span>
-                          <p className="pull-right">$ {cartSubtotal}</p>
+                          <p className="pull-right">$ {cartSubtotal.toFixed(2)}</p>
                         </li>
                         <li>
                           <span className="pull-left">
@@ -225,5 +278,6 @@ const CartPage = () => {
     </div>
   );
 };
+
 
 export default CartPage;
