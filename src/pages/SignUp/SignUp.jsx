@@ -107,7 +107,11 @@ const SignUp = () => {
                   </div>
                 )}
               </div>
-              <button type="submit">Sign Up</button>
+              <div className="form-group">
+                <button className="lab-btn">
+                  <span>Get Started Now</span>
+                </button>
+              </div>
             </form>
             <div className="account-bottom">
               <span className="d-block cate pt-10">

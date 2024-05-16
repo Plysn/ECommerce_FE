@@ -1,8 +1,8 @@
-import api from './baseApi';
+import api from "./baseApi";
 
 const productApi = {
   getListProducts() {
-    return api.get('/products');
+    return api.get("/products");
   },
   getProduct(id) {
     return api.get(`/product/${id}`);
@@ -11,14 +11,14 @@ const productApi = {
     return api.get(`/products/${categoryId}`);
   },
   postProduct(data) {
-    return api.post('/products/create', data);
+    return api.post("/products/create", data);
   },
-  updateProduct(id) {
-    return api.put(`/products/update/${id}`);
+  updateProduct(id, param) {
+    return api.put(`/products/update/${id}`, param);
   },
   deleteProduct(id) {
     return api.delete(`/products/delete/${id}`);
-  }
-}
+  },
+};
 
 export default productApi;

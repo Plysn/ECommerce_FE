@@ -24,7 +24,6 @@ const SignIn = () => {
       });
 
       if (response.status === 200) {
-        console.log(response);
         localStorage.setItem("user", JSON.stringify(response.data.data.user));
         localStorage.setItem(
           "access_token",
@@ -95,7 +94,11 @@ const SignIn = () => {
                   </div>
                 )}
               </div>
-              <button type="submit">Sign In</button>
+              <div className="form-group">
+                <button className="lab-btn">
+                  <span>Submit Now</span>
+                </button>
+              </div>
             </form>
             <div className="account-bottom">
               <span className="d-block cate pt-10">

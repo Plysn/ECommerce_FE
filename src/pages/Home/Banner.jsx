@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-
-import productData from "../../data/products.json";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { SearchOutlined } from "@ant-design/icons";
 
 const title = (
   <h2>
@@ -11,17 +9,17 @@ const title = (
 );
 const desc = "We Have The Largest Collection of products";
 
-const Banner = () => {
+const Banner = ({ products }) => {
   // product search funtionality
   const [searchInput, setSearchInput] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState(productData);
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
     setSearchInput(searchTerm);
 
     // Filter products based on the search term
-    const filtered = productData.filter((product) =>
+    const filtered = products.filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProducts(filtered);
@@ -40,7 +38,10 @@ const Banner = () => {
               value={searchInput}
               onChange={handleSearch}
             />
-            <button type="submit" style={{ paddingRight: 40, fontSize: 20, color: "#ffdf40" }}>
+            <button
+              type="submit"
+              style={{ paddingRight: 40, fontSize: 20, color: "#ffdf40" }}
+            >
               Search
             </button>
           </form>
@@ -57,6 +58,10 @@ const Banner = () => {
       </div>
     </div>
   );
+};
+
+Banner.propTypes = {
+  products: PropTypes.array.isRequired,
 };
 
 export default Banner;
