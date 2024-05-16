@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Table, Space, Button, Modal, Form, Input, Upload, Select, Image } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import {
+  Table,
+  Space,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Upload,
+  Select,
+  Image,
+} from "antd";
 import "../../assets/css/admin.css";
 import { message } from "antd";
 import productApi from "../../services/product";
 import categoryApi from "../../services/category";
-import { CloseCircleFilled, PlusOutlined } from '@ant-design/icons';
+import { CloseCircleFilled, PlusOutlined } from "@ant-design/icons";
 
 const ProductAdminPage = () => {
   const [filterCategory, setFilterCategory] = useState("");
+  const [filterCategoryForAction, setFilterCategoryForAction] = useState("");
 
   const [visible, setVisible] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false);
@@ -17,13 +26,17 @@ const ProductAdminPage = () => {
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
+  // get data product and category
   const fetchData = async () => {
     try {
       const response = await productApi.getListProducts();
       setProducts(response.data.data);
       const categoryResponse = await categoryApi.getAdminCategories();
-      setCategories(categoryResponse.data.data); // assuming you have a state variable 'categories'
+      setCategories(categoryResponse.data.data);
     } catch (error) {
       message.error(error);
     }
@@ -62,44 +75,84 @@ const ProductAdminPage = () => {
     {
       title: "Action",
       key: "action",
-      render: (text, record) => (
+      render: (record) => (
         <Space size="middle">
-          <Button type="primary" onClick={() => handleEdit(record)}>Edit</Button>
-          <Button onClick={() => handleDelete(record.id)} danger>
+          <Button type="primary" onClick={() => handleEdit(record)}>
+            Edit
+          </Button>
+          <Button type="primary" danger onClick={() => showModalDelete(record)}>
             Delete
           </Button>
+          <Modal
+            title="Confirm Delete"
+            visible={isModalVisible}
+            onOk={() => handleDelete(selectedRecord.id)}
+            onCancel={() => handleCancelDelete()}
+          >
+            <p>
+              Are you sure you want to delete this product:
+              {selectedRecord?.name}?
+            </p>
+          </Modal>
         </Space>
       ),
     },
   ];
 
-
-  const handleEdit = (record) => {
-    form.setFieldsValue(record);
-    setVisibleEdit(true);
+  // Delete product
+  const showModalDelete = (record) => {
+    setSelectedRecord(record);
+    setIsModalVisible(true);
   };
 
   const handleDelete = async (id) => {
-    // try {
-    //   await axios.delete(`your_api_url/products/${id}`);
-    //   fetchData();
-    // } catch (error) {
-    //   console.error("Error deleting product:", error);
-    // }
+    try {
+      await productApi.deleteProduct(id);
+      setIsModalVisible(false);
+      fetchData();
+      message.success("Product deleted successfully");
+    } catch (error) {
+      message.error("Product cannot be deleted!");
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalVisible(false);
+  };
+
+  // Add product
+  const openAddForm = () => {
+    const maxId = Math.max(...products.map((product) => product.id));
+    form.setFieldsValue({
+      id: maxId + 1,
+      name: "",
+      price: "",
+      quantity: "",
+      image: [],
+      description: "",
+    });
+    setVisible(true);
   };
 
   const handleOk = async () => {
     const values = await form.validateFields();
-    const imgs = values.image.fileList?.map((img) => { return img.originFileObj.name });
-    console.log(imgs);
+    let imgs = [];
+    if (values.image) {
+      imgs = values.image.fileList?.map((img) => {
+        return img.originFileObj.name;
+      });
+    }
+    values.image = imgs;
+    console.log(values);
+
     try {
-      const response = await productApi.postProduct(imgs);
+      await productApi.postProduct(values);
 
       // setVisible(false);
       // fetchData();
     } catch (error) {
       if (error.response.data.message === "image is not allowed") {
-        message.error("Vui lòng chọn ảnh sản phẩm")
+        message.error("Vui lòng chọn ảnh sản phẩm");
       }
     }
   };
@@ -107,21 +160,44 @@ const ProductAdminPage = () => {
   const handleCancel = () => {
     setVisible(false);
   };
-  const handleOkEdit = (record) => { setVisibleEdit(false) }
-  const handleCancelEdit = () => { setVisibleEdit(false) }
 
-  const handleUpload = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      // Perform preview logic here
-      const previewImage = reader.result;
-      console.log(previewImage);
-    };
+  // Edit product
+  const handleEdit = (record) => {
+    form.setFieldsValue(record);
+    setVisibleEdit(true);
+    setSelectedProductId(record.id);
+  };
+
+  const handleOkEdit = async (id) => {
+    console.log(id);
+    const values = await form.validateFields();
+    const imgs = values?.image?.fileList?.map((img) => {
+      return img.originFileObj.name;
+    });
+    values.image = imgs || [];
+    console.log(values);
+
+    try {
+      await productApi.updateProduct(id, { ...values });
+      message.success("Product updated successfully");
+      setVisibleEdit(false);
+      fetchData();
+    } catch (error) {
+      if (error.response.data.message === "image is not allowed") {
+        message.error("Vui lòng chọn ảnh sản phẩm");
+      }
+    }
+  };
+  const handleCancelEdit = () => {
+    setVisibleEdit(false);
   };
 
   const handleCategoryChange = (value) => {
     setFilterCategory(value);
+  };
+
+  const handleCategoryChangeForAction = (value) => {
+    setFilterCategoryForAction(value);
   };
 
   const filteredProducts = products.filter(
@@ -129,20 +205,36 @@ const ProductAdminPage = () => {
       filterCategory === "" || product.category.name === filterCategory
   );
 
-  const openAddForm = () => {
-    const maxId = Math.max(...products.map(product => product.id));
-    form.setFieldsValue({
-      id: maxId + 1,
-      name: '',
-      price: '',
-      quantity: '',
-      image: [],
-      description: ''
-    });
-    setVisible(true);
+  // Upload image
+  const handleRemoveImage = async (img, action) => {
+    // if (img.id) {
+    //   try {
+    //     const thumbsListWithImg = initialFileList.filter(
+    //       (file) =>
+    //         file?.attachment_type === "before" &&
+    //         file?.type === "image_thumbnail" &&
+    //         file?.parent_id === img?.id
+    //     );
+    //     const res = await contructItemApi.removeImageContruct(constructId, {
+    //       file_id: img?.id,
+    //     });
+    //     if (!res.is_result) return;
+    //     action.remove();
+    //     thumbsListWithImg.forEach(handleRemoveThumb);
+    //     initialFileList = initialFileList.filter((file) => file.id !== img.id);
+    //     setFileList(initialFileList);
+    //   } catch (error) {
+    //     message.error(
+    //       error?.response?.data?.message || t("message.error_system"),
+    //       3
+    //     );
+    //   }
+    // } else {
+    //   action.remove();
+    // }
   };
 
-  const handleRender = (__, img, _, action) => {
+  const handleRender = (__, img) => {
     let imgUploadUrl;
     if (!img.url) {
       imgUploadUrl = URL.createObjectURL(img.originFileObj);
@@ -150,15 +242,21 @@ const ProductAdminPage = () => {
 
     return (
       <div className="img-item">
-        <Image
-          rootClassName="modal-preview-img"
-          className="img"
-          src={img?.thumb?.url || img?.url || imgUploadUrl}
-          preview={{
-            src: img?.url,
-          }}
-          alt={img?.name}
+        <CloseCircleFilled
+          className="remove-icon fz-16"
+          onClick={() => handleRemoveImage(img, action)}
         />
+        <div className="image-container">
+          <Image
+            rootClassName="modal-preview-img"
+            className="img"
+            src={img?.thumb?.url || img?.url || imgUploadUrl}
+            preview={{
+              src: img?.url,
+            }}
+            alt={img?.name}
+          />
+        </div>
       </div>
     );
   };
@@ -174,7 +272,11 @@ const ProductAdminPage = () => {
           value={filterCategory}
         >
           <Select.Option value="">All</Select.Option>
-          {categories.map((category) => (<Select.Option value={category.name}>{category.name}</Select.Option>))}
+          {categories.map((category) => (
+            <Select.Option value={category.name} key={category.id}>
+              {category.name}
+            </Select.Option>
+          ))}
         </Select>
         <Table columns={columns} dataSource={filteredProducts} />
         <Modal
@@ -184,14 +286,19 @@ const ProductAdminPage = () => {
           onCancel={handleCancel}
         >
           <Form form={form}>
-            <Form.Item label="ID" name="categoryId">
-              <Input />
-              {/* <Select
+            <Form.Item label="ID Category" name="categoryId">
+              <Select
                 style={{ width: 200, marginBottom: 16 }}
-                placeholder="Filter by Category"
-                onChange={handleCategoryChange}
-                value={filterCategory}
-              /> */}
+                placeholder="Select Category"
+                onChange={handleCategoryChangeForAction}
+                value={filterCategoryForAction}
+              >
+                {categories.map((category) => (
+                  <Select.Option key={category.id} value={category.id}>
+                    {category.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item label="Name" name="name">
               <Input />
@@ -205,7 +312,7 @@ const ProductAdminPage = () => {
             <Form.Item label="Quantity" name="ratings">
               <Input />
             </Form.Item>
-            <Form.Item label="Image" name="image">
+            <Form.Item label="Image">
               <Upload
                 beforeUpload={() => false}
                 name={`child_${name}`}
@@ -215,17 +322,18 @@ const ProductAdminPage = () => {
                 accept="image/png, image/jpeg"
                 multiple
                 onChange={({ fileList }) => {
-                  // Get the url of each file
-                  const imageUrls = fileList.map(file => file.response.url);
-                  // Now you can set the imageUrls to your form or state
+                  console.log(fileList); // Check the value of fileList
+                  const imageUrls = fileList?.map((file) => {
+                    console.log(file.response.url); // Check the value of file.response.url
+                    return file?.response?.url;
+                  });
+                  console.log(imageUrls); // Check the value of imageUrls
                   form.setFieldsValue({ image: imageUrls });
                 }}
-              ><div className="btn-upload">
-                  <PlusOutlined className="fz-25" />
-                  <span className="btn-text fz-11 sub-color-text">
-                    Upload
-                  </span>
-
+              >
+                <div className="btn-upload">
+                  <PlusOutlined />
+                  <span className="btn-text">Upload</span>
                 </div>
               </Upload>
             </Form.Item>
@@ -237,12 +345,23 @@ const ProductAdminPage = () => {
         <Modal
           title="Edit Product"
           visible={visibleEdit}
-          onOk={handleEdit}
+          onOk={() => handleOkEdit(selectedProductId)}
           onCancel={handleCancelEdit}
         >
           <Form form={form}>
-            <Form.Item label="ID" name="id">
-              <Input disabled />
+            <Form.Item label="ID Category" name="categoryId">
+              <Select
+                style={{ width: 200, marginBottom: 16 }}
+                placeholder="Select Category"
+                onChange={handleCategoryChangeForAction}
+                value={filterCategoryForAction}
+              >
+                {categories.map((category) => (
+                  <Select.Option key={category.id} value={category.id}>
+                    {category.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item label="Name" name="name">
               <Input />
@@ -254,8 +373,25 @@ const ProductAdminPage = () => {
               <Input />
             </Form.Item>
             <Form.Item label="Image" name="image">
-              <Upload beforeUpload={handleUpload} accept="image/*" multiple={true} maxCount={20}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+              <Upload
+                beforeUpload={() => false}
+                name={`child_${name}`}
+                className="upload"
+                listType="picture-card"
+                itemRender={handleRender}
+                accept="image/png, image/jpeg"
+                multiple
+                onChange={({ fileList }) => {
+                  // Get the url of each file
+                  const imageUrls = fileList.map((file) => file.response.url);
+                  // Now you can set the imageUrls to your form or state
+                  form.setFieldsValue({ image: imageUrls });
+                }}
+              >
+                <div className="btn-upload">
+                  <PlusOutlined className="fz-25" />
+                  <span className="btn-text fz-11 sub-color-text">Upload</span>
+                </div>
               </Upload>
             </Form.Item>
             <Form.Item label="Description" name="description">
@@ -264,8 +400,7 @@ const ProductAdminPage = () => {
           </Form>
         </Modal>
       </div>
-
-    </div >
+    </div>
   );
 };
 

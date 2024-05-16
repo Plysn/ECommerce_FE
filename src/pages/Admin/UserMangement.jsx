@@ -1,55 +1,63 @@
-import React, { useState, useEffect } from "react";
-import { Table, Space, Button, Modal, Form, Input, Select } from "antd";
+import { useState, useEffect } from "react";
+import {
+  Table,
+  Space,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  message,
+} from "antd";
 import "../../assets/css/admin.css";
+import usersApi from "../../services/users";
 
 const UserMangement = () => {
-  const usersData = [
-    {
-      key: '1',
-      id: 'U001',
-      name: 'User 1',
-      email: 'user1@example.com',
-      password: 'password1',
-    },
-    {
-      key: '2',
-      id: 'U002',
-      name: 'User 2',
-      email: 'user2@example.com',
-      password: 'password2',
-    },
-    {
-      key: '3',
-      id: 'U003',
-      name: 'User 3',
-      email: 'user3@example.com',
-      password: 'password3',
-    },
-    {
-      key: '4',
-      id: 'U004',
-      name: 'User 4',
-      email: 'user4@example.com',
-      password: 'password4',
-    },
-  ];
+  const [usersData, setUsersData] = useState([]);
   const [filterCategory, setFilterCategory] = useState("");
 
   const [visible, setVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const fetchData = async () => {
+    try {
+      const response = await usersApi.getListUsers();
+      setUsersData(response.data.data);
+    } catch (error) {
+      message.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
-    // thực hiện xóa người dùng tại đây
+  const handleOkDelete = async (id) => {
+    try {
+      await usersApi.deleteUsers(id);
+      message.success("Delete user successfully!");
+      setIsModalVisible(false);
+      fetchData();
+    } catch (error) {
+      message.error("Delete user failed!");
+    }
+  };
+
+  const handleCancelDelete = () => {
     setIsModalVisible(false);
+  };
+  const handleOk = async () => {
+    setVisible(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setVisible(false);
   };
+
   const [form] = Form.useForm();
 
   const columns = [
@@ -59,9 +67,9 @@ const UserMangement = () => {
       key: "id",
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "User Name",
+      dataIndex: "username",
+      key: "username",
     },
     {
       title: "Email",
@@ -69,71 +77,47 @@ const UserMangement = () => {
       key: "email",
     },
     {
-      title: "Password",
-      dataIndex: "password",
-      key: "password",
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+    },
+    {
+      title: "Created At",
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (record) => <p>{new Date(record).toLocaleString()}</p>,
     },
     {
       title: "Action",
-      key: "action",
-      render: (text, record) => (
+      key: "id",
+      render: (record) => (
         <Space size="middle">
-          <Button type="primary" danger onClick={showModal}>
-            Delete
-          </Button>
-          <Modal title="Confirm Delete" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-            <p>Are you sure you want to delete this user?</p>
-          </Modal>
+          {record.role === "admin" ? null : (
+            <>
+              <Button type="primary" danger onClick={showModal}>
+                Delete
+              </Button>
+              <Modal
+                title="Confirm Delete"
+                visible={isModalVisible}
+                onOk={() => handleOkDelete(record.id)}
+                onCancel={() => handleCancelDelete}
+              >
+                <p>Are you sure you want to delete this user?</p>
+              </Modal>
+            </>
+          )}
         </Space>
       ),
     },
   ];
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    // try {
-    //   const response = await axios.get("your_api_url/products");
-    //   setProducts(response.data);
-    // } catch (error) {
-    //   console.error("Error fetching products:", error);
-    // }
-  };
-
-  const handleEdit = (record) => {
-    form.setFieldsValue(record);
-    setVisible(true);
-  };
-
-  const handleDelete = async (id) => {
-    // try {
-    //   await axios.delete(`your_api_url/products/${id}`);
-    //   fetchProducts();
-    // } catch (error) {
-    //   console.error("Error deleting product:", error);
-    // }
-  };
-
-
-  const handleUpload = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      // Perform preview logic here
-      const previewImage = reader.result;
-      console.log(previewImage);
-    };
-  };
-
   const handleCategoryChange = (value) => {
     setFilterCategory(value);
   };
 
-  const filteredProducts = usersData.filter(
-    (product) =>
-      filterCategory === "" || product.category === filterCategory
+  const filteredUser = usersData.filter(
+    (user) => filterCategory === "" || user.role === filterCategory
   );
 
   return (
@@ -147,10 +131,14 @@ const UserMangement = () => {
           value={filterCategory}
         >
           <Select.Option value="">All</Select.Option>
-          <Select.Option value="Category 1">User</Select.Option>
-          <Select.Option value="Category 2">Admin</Select.Option>
+          <Select.Option value="user">User</Select.Option>
+          <Select.Option value="admin">Admin</Select.Option>
         </Select>
-        <Table columns={columns} dataSource={filteredProducts} />
+        <Table
+          className="custom-table"
+          columns={columns}
+          dataSource={filteredUser}
+        />
         <Modal
           title="Add Admin"
           visible={visible}
@@ -170,7 +158,6 @@ const UserMangement = () => {
           </Form>
         </Modal>
       </div>
-
     </div>
   );
 };

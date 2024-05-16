@@ -7,11 +7,11 @@ const usersApi = {
   getUserInfo(id) {
     return api.get(`/users/${id}`);
   },
-  updatePassword(id) {
-    return api.post(`/users/update-password/${id}`);
+  updatePassword(id, param) {
+    return api.post(`/users/update-password/${id}`, param);
   },
-  updateUserInfo(id) {
-    return api.put(`/users/update/${id}`);
+  updateUserInfo(id, param) {
+    return api.put(`/users/update/${id}`, param);
   },
   deleteUsers(id) {
     return api.delete(`/users/delete/${id}`);

@@ -20,10 +20,11 @@ import ResetPassword from "./pages/SignIn/ResetPassword.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import Blog from "./pages/Blog/Blog.jsx";
 import SingleBlog from "./pages/Blog/SingleBlog.jsx";
-import CheckoutPage from "./pages/Shop/CheckoutPage.jsx";
 import Shop from "./pages/Shop/Shop.jsx";
 import SingleProduct from "./pages/Shop/SingleProduct.jsx";
-import PrivateRoute from "./PrivateRoute.jsx";
+// import PrivateRoute from "./PrivateRoute.jsx";
+import Contact from "./pages/Contact/Contact.jsx";
+import About from "./pages/About/About.jsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: "/blog/:id",
         element: <SingleBlog />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/about",
+        element: <About />,
       },
       {
         path: "/cart-page",

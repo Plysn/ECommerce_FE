@@ -21,13 +21,14 @@ function Home() {
 
     fetchData();
   }, []);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <>
-      <Banner />
+      <Banner products={products} />
       <HomeCategory />
       <CategoryShowCase products={products} />
-      <AppSection />
+      {!user && <AppSection />}
     </>
   );
 }

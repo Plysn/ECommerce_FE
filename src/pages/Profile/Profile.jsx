@@ -17,7 +17,7 @@ const Profile = () => {
   const [showPassword3, setShowPassword3] = useState(false);
 
   const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [password, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -67,57 +67,72 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    setPasswordMismatch(newPassword !== confirmPassword);
-  }, [newPassword, confirmPassword]);
+    setPasswordMismatch(password !== confirmPassword);
+  }, [password, confirmPassword]);
+
+  const fetchData = async () => {
+    try {
+      const response = await usersApi.getUserInfo(userId);
+      setUserInfo(response.data.data);
+    } catch (error) {
+      console.log("Có lỗi xảy ra! Vui lòng thử lại.");
+    }
+  };
+
+  console.log(userInfo);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await usersApi.getUserInfo(userId);
-        setUserInfo(response.data.data);
-      } catch (error) {
-        message.error(error);
-      }
-    };
-
     fetchData();
   }, [userId]);
-
-  console.log(oldPassword);
 
   const handleOk = async () => {
     try {
       const response = await usersApi.updatePassword(userId, {
         oldPassword,
-        newPassword,
-        confirmPassword
+        password,
+        confirmPassword,
       });
-      console.log(response);
+      if (response.status === 200) {
+        message.success("Thay đổi mật khẩu thành công!");
+        setIsModalVisible(false);
+      }
     } catch (error) {
       if (error.response.status === 422) {
         setErrorMessage("Mật khẩu cũ không chính xác! Vui lòng thử lại.");
       }
+      if (error.response.status === 404) {
+        setErrorMessage("Mật khẩu không hop le! Vui lòng thử lại.");
+      }
     }
   };
-
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-  const handleInputChange = (event) => {
-    if (changeInfoAble) {
-      setChangeInfoAble(false);
-      setUser({
-        ...user,
-        [event.target.fullname]: event.target.value,
-      });
-    } else {
-      setChangeInfoAble(true);
+  const handleChangeInfo = async () => {
+    try {
+      if (changeInfoAble) {
+        const { address, email, username, phone, fullname } = userInfo;
+        const updatedUserInfo = { address, email, username, phone, fullname };
+        const response = await usersApi.updateUserInfo(userId, updatedUserInfo);
+        if (response.status === 200) {
+          message.success("Cập nhật thông tin thành công!");
+        }
+        setChangeInfoAble(false);
+      } else {
+        setChangeInfoAble(true);
+      }
+    } catch (error) {
+      message.error("Có lỗi xảy ra! Vui lòng thử lại.");
+      window.location.reload();
     }
   };
 
-  const handleSubmit = () => { };
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
 
   return (
     <div className="container-fluid overcover">
@@ -132,11 +147,11 @@ const Profile = () => {
         </div>
         <div className="basic-detail row">
           <div className="col-md-8 detail-col">
-            <h2>Nguyen Thi Phuong Ly</h2>
+            <h2>{userInfo?.username}</h2>
             <div className="btn-cover">
               <button
                 className="btn btn-success"
-                onClick={() => handleInputChange()}
+                onClick={() => handleChangeInfo()}
               >
                 {changeInfoAble ? (
                   <span>Lưu thay đổi</span>
@@ -151,7 +166,7 @@ const Profile = () => {
               <Modal
                 title="Thay đổi mật khẩu"
                 visible={isModalVisible}
-                onOk={handleOk}
+                onOk={() => handleOk()}
                 onCancel={handleCancel}
               >
                 <form name="changePassword">
@@ -176,7 +191,7 @@ const Profile = () => {
                             type={showPassword2 ? "text" : "password"}
                             name="new-password"
                             placeholder="Mật khẩu mới *"
-                            value={newPassword}
+                            value={password}
                             onChange={handleNewPasswordChange}
                           />
                           <EyeOutlined onClick={togglePasswordVisibility2} />
@@ -230,10 +245,12 @@ const Profile = () => {
                               <th>Họ và tên</th>
                               <td>
                                 <input
-                                  type="name"
+                                  type="text"
                                   name="fullname"
                                   placeholder="Họ và tên *"
                                   disabled={!changeInfoAble}
+                                  value={userInfo ? userInfo.fullname : ""}
+                                  onChange={handleInputChange}
                                 />
                               </td>
                             </tr>
@@ -245,6 +262,8 @@ const Profile = () => {
                                   name="email"
                                   placeholder="Email *"
                                   disabled={!changeInfoAble}
+                                  value={userInfo ? userInfo.email : ""}
+                                  onChange={handleInputChange}
                                 />
                               </td>
                             </tr>
@@ -252,10 +271,12 @@ const Profile = () => {
                               <th>Số điện thoại</th>
                               <td>
                                 <input
-                                  type="phone"
+                                  type="tel"
                                   name="phone"
                                   placeholder="Phone *"
                                   disabled={!changeInfoAble}
+                                  value={userInfo ? userInfo.phone : ""}
+                                  onChange={handleInputChange}
                                 />
                               </td>
                             </tr>
@@ -292,10 +313,12 @@ const Profile = () => {
                                   <option value="saab">Lê Đại Hành</option>
                                 </select>
                                 <input
-                                  type="address"
+                                  type="text"
                                   name="address"
                                   placeholder="Street *"
                                   disabled={!changeInfoAble}
+                                  value={userInfo ? userInfo.address : ""}
+                                  onChange={handleInputChange}
                                 />
                               </td>
                             </tr>

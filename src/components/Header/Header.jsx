@@ -8,8 +8,6 @@ const NavItems = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [socialToggle, setSocialToggle] = useState(false);
   const [headerFiexd, setHeaderFiexd] = useState(false);
-  const [username, setUserName] = useState("");
-  const [avatar, setAvatar] = useState("");
   const navigate = useNavigate();
   const handleProfile = () => {
     navigate("/profile");
@@ -32,11 +30,11 @@ const NavItems = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("access_token");
     navigate("/");
+    window.location.reload();
   };
 
   let storedUser;
   const userFromStorage = localStorage.getItem("user");
-  console.log(userFromStorage);
   if (userFromStorage !== "undefined" && userFromStorage !== null) {
     storedUser = JSON.parse(userFromStorage);
   } else {
@@ -91,16 +89,10 @@ const NavItems = () => {
               {storedUser ? (
                 <>
                   <div>
-                    {storedUser?.avatar ? (
-                      <>
-                        <img src={avatar} className="nav-profile" />
-                      </>
-                    ) : (
-                      <img
-                        src="https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png"
-                        className="nav-profile"
-                      />
-                    )}
+                    <img
+                      src="https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png"
+                      className="nav-profile"
+                    />
                   </div>
                   <NavDropdown>
                     <NavDropdown.Item>
@@ -110,7 +102,7 @@ const NavItems = () => {
                       Profile
                     </NavDropdown.Item>
 
-                    {storedUser?.isAdmin && (
+                    {storedUser?.role === "admin" && (
                       <NavDropdown.Item onClick={handleAdmin}>
                         Admin
                       </NavDropdown.Item>
