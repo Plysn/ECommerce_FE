@@ -4,7 +4,7 @@ import axios from "axios"; // Import Axios
 
 const defaultDescription = "Energistia can deliver tactical metrics after visionary Appropriating transition enterpris an sources applications emerging psd template.";
 const axiosInstance = axios.create({
-  baseURL: 'https://ecommercebackend-production-4f03.up.railway.app/api',
+  baseURL: 'https://ecommercebackend-953d.up.railway.app/api',
   headers: {
     'Content-Type': 'application/json'
   }

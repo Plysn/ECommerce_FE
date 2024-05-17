@@ -12,7 +12,7 @@ const CartPage = () => {
 
   // Tạo một instance của axios
   const axiosInstance = axios.create({
-    baseURL: 'https://ecommercebackend-production-4f03.up.railway.app/api',
+    baseURL: 'https://ecommercebackend-953d.up.railway.app/api',
     headers: {
       'Content-Type': 'application/json'
     }

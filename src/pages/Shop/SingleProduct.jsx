@@ -19,7 +19,7 @@ const SingleProduct = () => {
     async function get_data() {
       try {
         console.log(id);
-        const rep = await axios.get(`https://ecommercebackend-production-4f03.up.railway.app/api/products/${id}`);
+        const rep = await axios.get(`https://ecommercebackend-953d.up.railway.app/api/products/${id}`);
        
         setResult([rep.data.data])
         console.log(rep)

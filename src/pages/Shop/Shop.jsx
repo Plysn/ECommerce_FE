@@ -21,7 +21,7 @@ const Shop = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`https://ecommercebackend-production-4f03.up.railway.app/api/products`);
+      const response = await axios.get(`https://ecommercebackend-953d.up.railway.app/api/products`);
       setProducts(response.data.data);
       console.log(response);
     } catch (error) {

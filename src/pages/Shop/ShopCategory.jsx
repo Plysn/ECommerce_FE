@@ -7,7 +7,7 @@ const ShopCategory = ({ filterItem, setProducts, selectedCategory }) => {
   // Fetch categories from API
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://ecommercebackend-production-4f03.up.railway.app/api/categories');
+      const response = await axios.get('https://ecommercebackend-953d.up.railway.app/api/categories');
       setCategories(response.data.data);
     } catch (error) {
       console.error('Lỗi khi lấy dữ liệu thể loại:', error);
@@ -17,7 +17,7 @@ const ShopCategory = ({ filterItem, setProducts, selectedCategory }) => {
   // Fetch products by category
   const fetchProductsByCategory = async (categoryId) => {
     try {
-      const response = await axios.get(`https://ecommercebackend-production-4f03.up.railway.app/api/products/list/${categoryId}`);
+      const response = await axios.get(`https://ecommercebackend-953d.up.railway.app/api/products/list/${categoryId}`);
       setProducts(response.data.data);
     } catch (error) {
       console.error('Lỗi khi lấy dữ liệu sản phẩm theo thể loại:', error);
