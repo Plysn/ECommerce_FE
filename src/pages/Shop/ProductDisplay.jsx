@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios"; // Import Axios
 
@@ -24,20 +24,24 @@ axiosInstance.interceptors.request.use(config => {
 
 
 const ProductDisplay = ({ item, token }) => {
+  console.log(item)
   const { id, img, price, name, seller, quantity, description } = item;
-  const [prequantity, setQuantity] = useState(quantity);
+  const [prequantity, setQuantity] = useState(1);
   const [coupon, setCoupon] = useState("");
   const [size, setSize] = useState("Select Size");
   const [color, setColor] = useState("Select Color");
+  const soluong = useRef(1)
 
   const handleDecrease = () => {
     if (prequantity > 1) {
       setQuantity(prequantity - 1);
+      soluong.current--;
     }
   };
 
   const handleIncrease = () => {
     setQuantity(prequantity + 1);
+    soluong.current++
   };
 
   const handleSizeChange = (e) => {
@@ -54,16 +58,16 @@ const ProductDisplay = ({ item, token }) => {
  
 
     try {
-      const a= await axiosInstance.post(`/carts/add/${id}`);
-        console.log('tu server ',a)
+      const a= await axiosInstance.post(`/carts/add/${id}?quantity=${soluong.current}`);
+      console.log(`/carts/add/${id}?quantity=${soluong.current}`)
+      console.log('tu server ',a)
       // Xử lý phản hồi nếu cần
       // Ví dụ: Hiển thị thông báo thành công cho người dùng
-
-      setQuantity(1);
       setSize("Select Size");
       setColor("Select Color");
       setCoupon("");
     } catch (error) {
+      console.log(`/carts/add/${id}?quantity=${soluong.current}`)
       console.error('Error adding item to cart:', error.message);
       // Xử lý lỗi nếu cần
       // Ví dụ: Hiển thị thông báo lỗi cho người dùng

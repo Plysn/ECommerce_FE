@@ -40,6 +40,7 @@ const CartPage = () => {
     try {
       const response = await axiosInstance.get('/carts');
       setCartItems(response.data.data);
+      console.log(response)
     } catch (error) {
       console.error('Error fetching cart items:', error);
     }
