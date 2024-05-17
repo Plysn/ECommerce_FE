@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Modal, Skeleton, message } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import "../../assets/css/profile.css";
 import usersApi from "../../services/users";
 
 const Profile = () => {
-  const [user, setUser] = useState({
-    name: "User Name",
-    email: "user@example.com",
-  });
-
   const [changeInfoAble, setChangeInfoAble] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [showPassword1, setShowPassword1] = useState(false);
@@ -20,7 +15,6 @@ const Profile = () => {
   const [password, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(true);
-  const [selectedFile, setSelectedFile] = useState(null);
   const [userId, setUserId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 
@@ -32,15 +26,8 @@ const Profile = () => {
       const parsedUser = JSON.parse(storedUserId);
       setUserId(parsedUser.id);
     }
+    setErrorMessage(null);
   }, []);
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-
-  const handleUploadClick = () => {
-    // Code to upload the file goes here
-  };
 
   const handleNewPasswordChange = (event) => {
     setNewPassword(event.target.value);
@@ -75,11 +62,9 @@ const Profile = () => {
       const response = await usersApi.getUserInfo(userId);
       setUserInfo(response.data.data);
     } catch (error) {
-      console.log("Có lỗi xảy ra! Vui lòng thử lại.");
+      console.log("An error occurred! Please try again.");
     }
   };
-
-  console.log(userInfo);
 
   useEffect(() => {
     fetchData();
@@ -93,15 +78,16 @@ const Profile = () => {
         confirmPassword,
       });
       if (response.status === 200) {
-        message.success("Thay đổi mật khẩu thành công!");
+        message.success("Password change successful!");
         setIsModalVisible(false);
+        fetchData();
       }
     } catch (error) {
       if (error.response.status === 422) {
-        setErrorMessage("Mật khẩu cũ không chính xác! Vui lòng thử lại.");
+        setErrorMessage("Old password is incorrect! Please try again.");
       }
       if (error.response.status === 404) {
-        setErrorMessage("Mật khẩu không hop le! Vui lòng thử lại.");
+        setErrorMessage("Invalid password! Please try again.");
       }
     }
   };
@@ -117,14 +103,14 @@ const Profile = () => {
         const updatedUserInfo = { address, email, username, phone, fullname };
         const response = await usersApi.updateUserInfo(userId, updatedUserInfo);
         if (response.status === 200) {
-          message.success("Cập nhật thông tin thành công!");
+          message.success("Updated personal information successfully!");
         }
         setChangeInfoAble(false);
       } else {
         setChangeInfoAble(true);
       }
     } catch (error) {
-      message.error("Có lỗi xảy ra! Vui lòng thử lại.");
+      message.error("An error occurred! Please try again.");
       window.location.reload();
     }
   };
@@ -154,17 +140,17 @@ const Profile = () => {
                 onClick={() => handleChangeInfo()}
               >
                 {changeInfoAble ? (
-                  <span>Lưu thay đổi</span>
+                  <span>Save Information</span>
                 ) : (
-                  <span>Chỉnh sửa thông tin</span>
+                  <span>Change Information</span>
                 )}
               </button>
               <button className="btn btn-success" onClick={showModal}>
-                Thay đổi mật khẩu
+                Change Password
               </button>
 
               <Modal
-                title="Thay đổi mật khẩu"
+                title=" Change Password"
                 visible={isModalVisible}
                 onOk={() => handleOk()}
                 onCancel={handleCancel}
@@ -173,24 +159,24 @@ const Profile = () => {
                   <table className="change-password-list">
                     <tbody>
                       <tr>
-                        <th>Mật khẩu cũ</th>
+                        <th>Old Password</th>
                         <td style={{ display: "flex", gap: 10 }}>
                           <input
                             type={showPassword1 ? "text" : "password"}
                             name="older-password"
-                            placeholder="Mật khẩu cũ *"
+                            placeholder="Old password *"
                             onChange={(e) => setOldPassword(e.target.value)}
                           />
                           <EyeOutlined onClick={togglePasswordVisibility1} />
                         </td>
                       </tr>
                       <tr>
-                        <th>Mật khẩu mới</th>
+                        <th>New password</th>
                         <td style={{ display: "flex", gap: 10 }}>
                           <input
                             type={showPassword2 ? "text" : "password"}
                             name="new-password"
-                            placeholder="Mật khẩu mới *"
+                            placeholder="New password *"
                             value={password}
                             onChange={handleNewPasswordChange}
                           />
@@ -198,12 +184,12 @@ const Profile = () => {
                         </td>
                       </tr>
                       <tr>
-                        <th>Nhập lại mật khẩu mới</th>
+                        <th>Confirm new password</th>
                         <td style={{ display: "flex", gap: 10 }}>
                           <input
                             type={showPassword3 ? "text" : "password"}
                             name="new-password-confirmation"
-                            placeholder="Nhập lại mật khẩu mới *"
+                            placeholder="Confirm new password *"
                             value={confirmPassword}
                             onChange={handleConfirmPasswordChange}
                           />
@@ -214,7 +200,7 @@ const Profile = () => {
                   </table>
                   {passwordMismatch && (
                     <span style={{ color: "red", padding: "13px 10px" }}>
-                      Mật khẩu mới không trùng khớp!
+                      Password mismatch!
                     </span>
                   )}
                   {errorMessage && (
@@ -242,14 +228,27 @@ const Profile = () => {
                         <table className="addrss-list">
                           <tbody>
                             <tr>
-                              <th>Họ và tên</th>
+                              <th>Fullname</th>
                               <td>
                                 <input
                                   type="text"
                                   name="fullname"
-                                  placeholder="Họ và tên *"
+                                  placeholder="Fullname *"
                                   disabled={!changeInfoAble}
                                   value={userInfo ? userInfo.fullname : ""}
+                                  onChange={handleInputChange}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>User name</th>
+                              <td>
+                                <input
+                                  type="text"
+                                  name="username"
+                                  placeholder="User name *"
+                                  disabled={!changeInfoAble}
+                                  value={userInfo ? userInfo.username : ""}
                                   onChange={handleInputChange}
                                 />
                               </td>
@@ -268,7 +267,7 @@ const Profile = () => {
                               </td>
                             </tr>
                             <tr>
-                              <th>Số điện thoại</th>
+                              <th>Phone</th>
                               <td>
                                 <input
                                   type="tel"
@@ -281,7 +280,7 @@ const Profile = () => {
                               </td>
                             </tr>
                             <tr>
-                              <th>Địa chỉ giao hàng</th>
+                              <th>Address</th>
                               <td>
                                 <select
                                   disabled={!changeInfoAble}

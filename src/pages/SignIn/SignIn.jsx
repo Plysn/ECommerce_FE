@@ -24,7 +24,7 @@ const SignIn = () => {
       });
 
       if (response.status === 200) {
-        console.log(response.data);
+        console.log(response.data.data);
         localStorage.setItem("user", JSON.stringify(response.data.data));
         localStorage.setItem(
           "access_token",
@@ -45,6 +45,18 @@ const SignIn = () => {
       } else {
         console.log("Error making request:", error);
       }
+    }
+  };
+
+  const handleSignInWithGoogle = async () => {
+    try {
+      const response = await authApi.signinWithGoogle();
+      if (response.status === 200) {
+        window.open(`${response.data.data}`, "_blank");
+      }
+    } catch (error) {
+      message.error("Đăng nhập thất bại! Vui lòng thử lại.");
+      console.log("Error making request:", error);
     }
   };
 
@@ -114,7 +126,10 @@ const SignIn = () => {
 
               {/* social icons */}
               <h5 className="subtitle">{socialTitle}</h5>
-              <button className="google-signin-btn">
+              <button
+                className="google-signin-btn"
+                onClick={() => handleSignInWithGoogle()}
+              >
                 <svg
                   width="24"
                   height="24"

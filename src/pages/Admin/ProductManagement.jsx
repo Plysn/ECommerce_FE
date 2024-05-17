@@ -9,6 +9,7 @@ import {
   Upload,
   Select,
   Image,
+  InputNumber,
 } from "antd";
 import "../../assets/css/admin.css";
 import { message } from "antd";
@@ -29,6 +30,7 @@ const ProductAdminPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [productImg, setProductImg] = useState("");
 
   // get data product and category
   const fetchData = async () => {
@@ -127,8 +129,8 @@ const ProductAdminPage = () => {
       id: maxId + 1,
       name: "",
       price: "",
-      quantity: "",
-      image: [],
+      quantity: 0,
+      img: "",
       description: "",
     });
     setVisible(true);
@@ -136,23 +138,14 @@ const ProductAdminPage = () => {
 
   const handleOk = async () => {
     const values = await form.validateFields();
-    let imgs = [];
-    if (values.image) {
-      imgs = values.image.fileList?.map((img) => {
-        return img.originFileObj.name;
-      });
-    }
-    values.img = ["12312313.jpg"];
-    console.log(values);
-
     try {
       await productApi.postProduct(values);
-
-      // setVisible(false);
-      // fetchData();
+      setVisible(false);
+      fetchData();
+      message.success("Product added successfully");
     } catch (error) {
       if (error.response.data.message === "image is not allowed") {
-        message.error("Vui lòng chọn ảnh sản phẩm");
+        message.error("Select product image");
       }
     }
   };
@@ -166,17 +159,11 @@ const ProductAdminPage = () => {
     form.setFieldsValue(record);
     setVisibleEdit(true);
     setSelectedProductId(record.id);
+    setProductImg(record.image);
   };
 
   const handleOkEdit = async (id) => {
-    console.log(id);
     const values = await form.validateFields();
-    const imgs = values?.image?.fileList?.map((img) => {
-      return img.originFileObj.name;
-    });
-    values.image = imgs || [];
-    console.log(values);
-
     try {
       await productApi.updateProduct(id, { ...values });
       message.success("Product updated successfully");
@@ -206,32 +193,14 @@ const ProductAdminPage = () => {
   );
 
   // Upload image
+  const handleFileChange = ({ fileList }) => {
+    const imageUrls = fileList.map((file) => file.name);
+    const imageUrlString = imageUrls.join(", ");
+    form.setFieldsValue({ img: imageUrlString });
+  };
+
   const handleRemoveImage = async (img, action) => {
-    // if (img.id) {
-    //   try {
-    //     const thumbsListWithImg = initialFileList.filter(
-    //       (file) =>
-    //         file?.attachment_type === "before" &&
-    //         file?.type === "image_thumbnail" &&
-    //         file?.parent_id === img?.id
-    //     );
-    //     const res = await contructItemApi.removeImageContruct(constructId, {
-    //       file_id: img?.id,
-    //     });
-    //     if (!res.is_result) return;
-    //     action.remove();
-    //     thumbsListWithImg.forEach(handleRemoveThumb);
-    //     initialFileList = initialFileList.filter((file) => file.id !== img.id);
-    //     setFileList(initialFileList);
-    //   } catch (error) {
-    //     message.error(
-    //       error?.response?.data?.message || t("message.error_system"),
-    //       3
-    //     );
-    //   }
-    // } else {
-    //   action.remove();
-    // }
+    action.remove(img);
   };
 
   const handleRender = (__, img) => {
@@ -309,10 +278,10 @@ const ProductAdminPage = () => {
             <Form.Item label="Seller" name="seller">
               <Input />
             </Form.Item>
-            <Form.Item label="Quantity" name="ratings">
-              <Input />
+            <Form.Item label="Quantity" name="stock">
+              <InputNumber />
             </Form.Item>
-            <Form.Item label="Image">
+            <Form.Item label="Image" name="img">
               <Upload
                 beforeUpload={() => false}
                 name={`child_${name}`}
@@ -320,16 +289,8 @@ const ProductAdminPage = () => {
                 listType="picture-card"
                 itemRender={handleRender}
                 accept="image/png, image/jpeg"
-                multiple
-                onChange={({ fileList }) => {
-                  console.log(fileList); // Check the value of fileList
-                  const imageUrls = fileList?.map((file) => {
-                    console.log(file.response.url); // Check the value of file.response.url
-                    return file?.response?.url;
-                  });
-                  console.log(imageUrls); // Check the value of imageUrls
-                  form.setFieldsValue({ image: imageUrls });
-                }}
+                maxCount={1}
+                onChange={(fileList) => handleFileChange(fileList)}
               >
                 <div className="btn-upload">
                   <PlusOutlined />
@@ -370,9 +331,9 @@ const ProductAdminPage = () => {
               <Input />
             </Form.Item>
             <Form.Item label="Quantity" name="stock">
-              <Input />
+              <InputNumber />
             </Form.Item>
-            <Form.Item label="Image" name="image">
+            <Form.Item label="Image" name="img">
               <Upload
                 beforeUpload={() => false}
                 name={`child_${name}`}
@@ -380,13 +341,7 @@ const ProductAdminPage = () => {
                 listType="picture-card"
                 itemRender={handleRender}
                 accept="image/png, image/jpeg"
-                multiple
-                onChange={({ fileList }) => {
-                  // Get the url of each file
-                  const imageUrls = fileList.map((file) => file.response.url);
-                  // Now you can set the imageUrls to your form or state
-                  form.setFieldsValue({ image: imageUrls });
-                }}
+                onChange={(fileList) => handleFileChange(fileList)}
               >
                 <div className="btn-upload">
                   <PlusOutlined className="fz-25" />

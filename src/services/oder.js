@@ -10,10 +10,10 @@ const orderApi = {
   postCart(id) {
     return api.post(`/orders/add/${id}`);
   },
-  updateStatusOrder(id) {
-    return api.put(`/orders/update/${id}`);
+  updateStatusOrder(id, param) {
+    return api.put(`/orders/update/${id}`, param);
   },
-  deleteCart(id) {
+  deleteOrder(id) {
     return api.delete(`/orders/delete/${id}`);
   },
 };
