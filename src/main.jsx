@@ -25,6 +25,7 @@ import SingleProduct from "./pages/Shop/SingleProduct.jsx";
 // import PrivateRoute from "./PrivateRoute.jsx";
 import Contact from "./pages/Contact/Contact.jsx";
 import About from "./pages/About/About.jsx";
+import ForgetPassword from "./pages/SignIn/FogetPassword.jsx";
 
 const router = createBrowserRouter([
   {
@@ -97,7 +98,8 @@ const router = createBrowserRouter([
     path: "/sign-up",
     element: <SignUp />,
   },
-  { path: "/forgetpass", element: <ResetPassword /> },
+  { path: "/forgetpass", element: <ForgetPassword /> },
+  { path: "/reset-password", element: <ResetPassword /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

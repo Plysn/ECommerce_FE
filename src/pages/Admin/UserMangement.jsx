@@ -24,11 +24,12 @@ const UserMangement = () => {
       const response = await usersApi.getListUsers();
       setUsersData(response.data.data);
     } catch (error) {
+      message.error(error);
       if (error.response.message === "Unauthorized") {
-        message.error("You are not authorized to view this page! Please login again");
-
-      }
-      else {
+        message.error(
+          "You are not authorized to view this page! Please login again"
+        );
+      } else {
         message.error("An error occurred while fetching products");
       }
     }
@@ -88,10 +89,16 @@ const UserMangement = () => {
       key: "role",
     },
     {
+      title: "Phone",
+      dataIndex: "phone",
+      key: "phone",
+      render: (record) => record !== "/0" && <div>{record}</div>,
+    },
+    {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
-      render: (record) => <p>{new Date(record).toLocaleString()}</p>,
+      render: (record) => <div>{new Date(record).toLocaleString()}</div>,
     },
     {
       title: "Action",

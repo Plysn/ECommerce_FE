@@ -9,7 +9,10 @@ const authApi = {
   },
   forgotPassword(params) {
     return api.post("/auth/forgot-password", params);
-  }
+  },
+  signinWithGoogle() {
+    return api.get("/auth/google");
+  },
 };
 
 export default authApi;

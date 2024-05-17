@@ -1,97 +1,97 @@
-import React, { useState } from 'react';
-import { Button, Form, Input, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 import authApi from "../../services/auth";
 
-import "../../assets/css/signin.css"
+const title = "Reset Password";
 
-function ResetPassword() {
+const ResetPassword = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const navigate = useNavigate();
 
-  const [success, setSuccess] = useState(false);
+  const handleReset = async (event) => {
+    event.preventDefault();
 
-  const onFinish = async ({ email }) => {
     try {
-      const res = await authApi.forgotPassword({
-        email,
-      });
-      if (res) {
-        setSuccess(true);
+      const response = await authApi.resetPassword({});
+
+      if (response.status === 200) {
+        localStorage.setItem("user", JSON.stringify(response.data.data));
+        localStorage.setItem(
+          "access_token",
+          JSON.stringify(response.data.access_token)
+        );
+        message.success("Đăng nhập thành công!");
+        navigate("/");
       }
     } catch (error) {
-      if (error?.response?.data?.status === 422) {
-        message.error("Vui lòng kiểm tra lại email");
-      } else {
+      if (error?.response?.data?.code === "not_found_email") {
         message.error("Vui lòng kiểm tra lại email");
       }
     }
   };
 
   return (
-    <div className="reset-password-mail ">
-      <img src="https://accgroup.vn/wp-content/uploads/2023/01/tmdt.jpg.webp"
+    <div>
+      <img
+        src="https://accgroup.vn/wp-content/uploads/2023/01/tmdt.jpg.webp"
         alt="Background"
         style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: '-1',
-          filter: 'blur(4px)'
-        }} />
-      <div className="account-wrapper container">
-        <Form
-          name="normal_login"
-          className="account-form"
-          onFinish={onFinish}
-          layout="vertical"
-        >
-          {success ? (
-            <>
-              Please check your email to reset your password
-            </>
-          ) : (
-            <>
-              <h1 className="title">
-                Forget Password
-              </h1>
-              <ul className=" list-message">
-                Enter your email to receive password reset instructions
-              </ul>
-              <Form.Item
-                rules={[
-                ]}
-                name="email"
-                className="form-group"
-              >
-                <Input
-                  name="password"
-                  className="form-group"
-                  type="email"
-                  placeholder={"Nhập email của bạn"}
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: "-1",
+          filter: "blur(4px)",
+        }}
+      />
+      <div className="login-section padding-tb">
+        <div className="container">
+          <div className="account-wrapper">
+            <h3 className="title">{title}</h3>
+
+            <form className="account-form" onSubmit={handleReset}>
+              <div className="form-group">
+                <div className="form-group">
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password *"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm Password *"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
                 />
-              </Form.Item>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <button
-                  htmlType="submit"
-                  className="d-block lab-btn button-send"
-                >
-                  Send to email
-                </button>
-                <button
-                  shape="round"
-                  className="d-block lab-btn button-cancel"
-                  onClick={() => navigate("/sign-in")}
-                >
-                  Cancel
+              </div>
+              {/* showing error message */}
+              <div>
+                {errorMessage && (
+                  <div className="error-message text-danger">
+                    {errorMessage}
+                  </div>
+                )}
+              </div>
+              <div className="form-group">
+                <button className="lab-btn">
+                  <span>Submit Now</span>
                 </button>
               </div>
-            </>
-          )}
-        </Form>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default ResetPassword;
