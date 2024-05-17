@@ -4,30 +4,30 @@ const title = "Most Popular Post";
 const postList = [
   {
     id: 1,
-    imgUrl: "/src/assets/images/blog/10.jpg",
+    imgUrl: "/src/assets/images/blog/01.jpg",
     imgAlt: "rajibraj91",
-    title: "Poor People Campaign Our Resources",
+    title: "Business Ueporting Rouncil Them Could Plan.",
     date: "Jun 05,2022",
   },
   {
     id: 2,
-    imgUrl: "/src/assets/images/blog/11.jpg",
+    imgUrl: "/src/assets/images/blog/02.jpg",
     imgAlt: "rajibraj91",
-    title: "Poor Peoples Campaign ",
+    title: "Financial Reporting Qouncil What Could More.",
     date: "Jun 05,2022",
   },
   {
     id: 3,
-    imgUrl: "/src/assets/images/blog/12.jpg",
+    imgUrl: "/src/assets/images/blog/03.jpg",
     imgAlt: "rajibraj91",
-    title: "Poor Peoples Campaign Our Resources",
+    title: "Consulting Reporting Qounc Arei Could More.",
     date: "Jun 05,2022",
   },
   {
     id: 4,
-    imgUrl: "/src/assets/images/blog/09.jpg",
+    imgUrl: "/src/assets/images/blog/04.jpg",
     imgAlt: "rajibraj91",
-    title: "Poor Peoples Campaign Our Resources",
+    title: "Strategic Social Media and of visual design.",
     date: "Jun 05,2022",
   },
 ];
