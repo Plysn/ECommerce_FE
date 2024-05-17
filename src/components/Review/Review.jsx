@@ -7,29 +7,29 @@ let ReviewList = [
     imgUrl: "/src/assets/images/instructor/01.jpg",
     imgAlt: "Client thumb",
     name: "Ganelon Boileau",
-    date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "Enthusiast build innovativ initiatives before lonterm high-impact awesome theme seo psd porta monetize covalent leadership after without resource.",
+    date: "Posted on Jul 28, 2023 at 6:57 am",
+    desc: "Good.",
   },
   {
     imgUrl: "/src/assets/images/instructor/02.jpg",
     imgAlt: "Client thumb",
     name: "Morgana Cailot",
-    date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "Enthusiast build innovativ initiatives before lonterm high-impact awesome theme seo psd porta monetize covalent leadership after without resource.",
+    date: "Posted on Oct 10, 2023 at 9:32 am",
+    desc: "Awesome.",
   },
   {
     imgUrl: "/src/assets/images/instructor/03.jpg",
     imgAlt: "Client thumb",
     name: "Telford Bois",
-    date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "Enthusiast build innovativ initiatives before lonterm high-impact awesome theme seo psd porta monetize covalent leadership after without resource.",
+    date: "Posted on Dec 10, 2023 at 8:11 pm",
+    desc: "Cheap.",
   },
   {
     imgUrl: "/src/assets/images/instructor/04.jpg",
     imgAlt: "Client thumb",
     name: "Cher Daviau",
-    date: "Posted on Jun 10, 2022 at 6:57 am",
-    desc: "Enthusiast build innovativ initiatives before lonterm high-impact awesome theme seo psd porta monetize covalent leadership after without resource.",
+    date: "Posted on Jan 16, 2024 at 11:12 am",
+    desc: "Beautiful.",
   },
 ];
 
@@ -77,70 +77,8 @@ const Review = () => {
               </li>
             ))}
           </ul>
-          <div className="client-review">
-            <div className="review-form">
-              <div className="review-title">
-                <h5>{reviwtitle}</h5>
-              </div>
-              <form action="action" className="row">
-                <div className="col-md-4 col-12">
-                  <input type="text" name="name" placeholder="Full Name *" />
-                </div>
-                <div className="col-md-4 col-12">
-                  <input type="text" name="email" placeholder="Your Email *" />
-                </div>
-                <div className="col-md-4 col-12">
-                  <div className="rating">
-                    <span className="rating-title">Your Rating : </span>
-                    <Rating />
-                  </div>
-                </div>
-                <div className="col-md-12 col-12">
-                  <textarea
-                    rows="8"
-                    type="text"
-                    name="message"
-                    placeholder="Type Here Message"
-                  ></textarea>
-                </div>
-                <div className="col-12">
-                  <button className="default-button" type="submit">
-                    <span>Submit Review</span>
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
         </div>
         <div className="description">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <div className="post-item">
-            <div className="post-thumb">
-              <img src="/src/assets/images/shop/01.jpg" alt="shop" />
-            </div>
-            <div className="post-content">
-              <ul className="lab-ul">
-                <li>Donec non est at libero vulputate rutrum.</li>
-                <li>Morbi ornare lectus quis justo gravida semper.</li>
-                <li>Pellentesque aliquet, sem eget laoreet ultrices.</li>
-                <li>
-                  Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id
-                  nulla.
-                </li>
-                <li>Donec a neque libero.</li>
-                <li>Pellentesque aliquet, sem eget laoreet ultrices.</li>
-                <li>Morbi ornare lectus quis justo gravida semper..</li>
-              </ul>
-            </div>
-          </div>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim

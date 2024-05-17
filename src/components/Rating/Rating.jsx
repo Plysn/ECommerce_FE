@@ -7,9 +7,9 @@ const Rating = ({ rating }) => {
       {[...Array(5)].map((star, i) => {
         const ratingValue = i + 1;
         return ratingValue <= rating ? (
-          <StarFilled key={i} />
+          <StarFilled key={i} style={{ color: "yellow" }} /> // Áp dụng màu vàng
         ) : (
-          <StarOutlined key={i} />
+          <StarOutlined key={i} style={{ color: "yellow" }} /> // Áp dụng màu vàng
         );
       })}
     </span>
