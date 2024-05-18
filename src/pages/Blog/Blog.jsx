@@ -6,7 +6,7 @@ import blogList from "../../data/blog.json";
 const Blog = () => {
   return (
     <div>
-      <BreadCrumb title={"Our Blog Posts"} curPage={"Blog"} />
+      <BreadCrumb title={"Our Blog Posts"} curPage={<Link to="/blog">Blog</Link>} />
       <div className="blog-section padding-tb section-bg">
         <div className="container">
           <div className="section-wrapper">

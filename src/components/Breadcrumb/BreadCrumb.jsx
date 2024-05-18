@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const BreadCrumb = ({ title, curPage }) => {
+const BreadCrumb = ({ title, curPage, addi }) => {
   return (
     <div className="pageheader-section">
       <div className="container">
@@ -18,6 +18,11 @@ const BreadCrumb = ({ title, curPage }) => {
                   <li className="breadcrumb-item active" aria-current="page">
                     {curPage}
                   </li>
+                  {addi && (
+                    <li className="breadcrumb-item active" aria-current="page">
+                      {addi}
+                    </li>
+                  )}
                 </ol>
               </nav>
             </div>

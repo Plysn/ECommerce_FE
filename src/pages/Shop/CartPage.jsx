@@ -113,7 +113,7 @@ const CartPage = () => {
 
   return (
     <div>
-      <BreadCrumb title={"Shop Cart"} curPage={"Cart Page"} />
+      <BreadCrumb title={"Shop Cart"} curPage={<Link to="/cart-page">Cart</Link>} />
       <div className="shop-cart padding-tb">
         <div className="container">
           <div className="section-wrapper">

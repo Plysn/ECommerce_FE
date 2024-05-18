@@ -8,7 +8,7 @@ import Tags from "./Tags";
 import ProductCards from "./ProductCards";
 const showResult = "Showing 01 - 12 of 139 Results";
 import MostPopularPost from "../Blog/MostPopularPost";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 const Shop = () => {
@@ -62,7 +62,7 @@ const Shop = () => {
 
   return (
     <div>
-      <BreadCrumb title={"Our Shop Pages"} curPage={"Shop"} />
+      <BreadCrumb title={"Our Shop Pages"} curPage={<Link to="/shop">Shop</Link>} />
 
       {/* shop page */}
       <div className="shop-page padding-tb">

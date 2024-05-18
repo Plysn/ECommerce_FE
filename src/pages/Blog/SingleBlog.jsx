@@ -4,6 +4,7 @@ import blogList from "../../data/blog.json";
 import MostPopularPost from "./MostPopularPost";
 import BreadCrumb from "../../components/Breadcrumb/BreadCrumb";
 import Tags from "../Shop/Tags";
+import { Link } from "react-router-dom";
 const socialList = [
   {
     link: "#",
@@ -39,7 +40,7 @@ const SingleBlog = () => {
 
   return (
     <div>
-      <BreadCrumb title={"Single Blog Pages"} curPage={"Blog / Blog Details"} />
+      <BreadCrumb title={"Single Blog Pages"} curPage={<Link to="/blog">Blog</Link>} addi={"Blog Details"} />
       <div className="blog-section blog-single padding-tb section-bg">
         <div className="container">
           <div className="row justify-content-center">

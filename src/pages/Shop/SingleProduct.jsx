@@ -9,7 +9,7 @@ import Review from "../../components/Review/Review";
 import MostPopularPost from "../Blog/MostPopularPost";
 import ProductDisplay from "./ProductDisplay";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 
 
 const SingleProduct = () => {
@@ -34,7 +34,7 @@ const SingleProduct = () => {
 
   return (
     <div>
-      <BreadCrumb title={"OUR SHOP SINGLE"} curPage={"Shop / Single Product"} />
+      <BreadCrumb title={"OUR SHOP SINGLE"} curPage={<Link to="/shop">Shop</Link>} addi={"Single Product"} />
       <div className="shop-single padding-tb aside-bg">
         <div className="container">
           <div className="row justify-content-center">

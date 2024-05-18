@@ -1,6 +1,6 @@
 import GoogleMap from "../../components/GoogleMap/GoogleMap";
 import BreadCrumb from "../../components/Breadcrumb/BreadCrumb";
-
+import { Link } from "react-router-dom";
 const subTitle = "Get in touch with us";
 const title = "We're Always Eager To Hear From You!";
 const conSubTitle = "Get in touch with Contact us";
@@ -38,7 +38,7 @@ const contactList = [
 const Contact = () => {
   return (
     <div>
-      <BreadCrumb title={"Get In Touch With Us"} curPage={"Contact Us"} />
+      <BreadCrumb title={"Get In Touch With Us"} curPage={<Link to="/contact">Contact</Link>} />
       <div className="map-address-section padding-tb section-bg">
         <div className="container">
           <div className="section-header text-center">
