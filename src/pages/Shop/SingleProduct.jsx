@@ -49,10 +49,6 @@ const SingleProduct = () => {
                             spaceBetween={30}
                             slidesPerView={1}
                             modules={[Navigation]}
-                            navigation={{
-                              prevEl: ".pro-single-prev",
-                              nextEl: ".pro-single-next",
-                            }}
                           >
                             {result.map((item, i) => (
                               <SwiperSlide key={i}>
@@ -69,12 +65,6 @@ const SingleProduct = () => {
                               </SwiperSlide>
                             ))}
                           </Swiper>
-                          <div className="pro-single-next">
-                            <i className="icofont-rounded-left"></i>
-                          </div>
-                          <div className="pro-single-prev">
-                            <i className="icofont-rounded-right"></i>
-                          </div>
                         </div>
                       </div>
                     </div>

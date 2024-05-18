@@ -14,24 +14,13 @@ const ProductCards = ({ products, GridList }) => {
         <div className="col-lg-4 col-md-6 col-12" key={i}>
           <div className="product-item">
             <div className="product-thumb">
-              <div className="pro-thumb ">
+              <Link to={`/shop/${product.id}`}>
                 <img
                   src={`${product.img}`}
-                  alt={`${product.img}`}
+                  alt={`${product.imgAlt}`}
                   className="img-card"
                 />
-              </div>
-              <div className="product-action-link product-action-link-wrap">
-                <Link to={`/shop/${product.id}`}>
-                  <i className="icofont-eye"></i>
-                </Link>
-                <a href="#">
-                  <i className="icofont-heart"></i>
-                </a>
-                <a href="#">
-                  <i className="icofont-cart-alt"></i>
-                </a>
-              </div>
+              </Link>
             </div>
             <div className="product-content">
               <h5>
@@ -44,30 +33,16 @@ const ProductCards = ({ products, GridList }) => {
             </div>
           </div>
           <div className="product-list-item">
-            <div className="product-thumb">
-              <div className="pro-thumb">
-                <img src={`${product.img}`} alt={`${product.imgAlt}`} />
-              </div>
-              <div className="product-action-link">
-                <a href="#">
-                  <i className="icofont-eye"></i>
-                </a>
-                <a href="#">
-                  <i className="icofont-heart"></i>
-                </a>
-                <a href="#">
-                  <i className="icofont-cart-alt"></i>
-                </a>
-              </div>
-            </div>
-            <div className="product-content">
-              <Link to={`/shop/${product.id}`}>{product.name}</Link>
-              <p className="productRating">
-                <Rating />
-              </p>
-              <h6>${product.price}</h6>
-              <p>{product.seller}</p>
-            </div>
+            <Link to={`/shop/${product.id}`}>{product.name}</Link>
+            <img
+                  src={`${product.img}`}
+                  alt={`${product.imgAlt}`}
+            />
+            <p className="productRating">
+              <Rating />
+            </p>
+            <h6>${product.price}</h6>
+            <p>{product.seller}</p>
           </div>
         </div>
       ))}

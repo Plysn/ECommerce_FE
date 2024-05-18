@@ -1,6 +1,7 @@
 import React, { useState,useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios"; // Import Axios
+import Rating from "../../components/Rating/Rating";
 
 const defaultDescription = "Energistia can deliver tactical metrics after visionary Appropriating transition enterpris an sources applications emerging psd template.";
 const axiosInstance = axios.create({
@@ -79,12 +80,8 @@ const ProductDisplay = ({ item, token }) => {
       <div>
         <h4>{name}</h4>
         <p className="rating">
-          <i className="icofont-star"></i>
-          <i className="icofont-star"></i>
-          <i className="icofont-star"></i>
-          <i className="icofont-star"></i>
-          <i className="icofont-star"></i>
-          (3 review)
+          <Rating />
+          (4 reviews)
         </p>
         <h4>${price}</h4>
         <h6>{seller}</h6>
@@ -110,33 +107,17 @@ const ProductDisplay = ({ item, token }) => {
           <div className="select-product size">
             <select value={size} onChange={handleSizeChange}>
               <option>Select Size</option>
-              <option>37</option>
-              <option>38</option>
-              <option>39</option>
-              <option>40</option>
-              <option>41</option>
-              <option>42</option>
+              <option>Size 36</option>
+              <option>Size 37</option>
+              <option>Size 38</option>
+              <option>Size 39</option>
+              <option>Size 40</option>
+              <option>Size 41</option>
+              <option>Size 42</option>
+              <option>Size 43</option>
+              <option>Size 44</option>
+              <option>Size 45</option>
             </select>
-            <i className="icofont-rounded-down"></i>
-          </div>
-          <div className="select-product color">
-            <select value={color} onChange={handleColorChange}>
-              <option>Select Color</option>
-              <option>Red</option>
-              <option>Blue</option>
-              <option>Green</option>
-              <option>Black</option>
-              <option>White</option>
-            </select>
-            <i className="icofont-rounded-down"></i>
-          </div>
-          <div className="coupon-field">
-            <input
-              type="text"
-              placeholder="Coupon Code"
-              value={coupon}
-              onChange={(e) => setCoupon(e.target.value)}
-            />
           </div>
           <button type="submit" className="lab-btn">
             <span>Add To Cart</span>
