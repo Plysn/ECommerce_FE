@@ -1,26 +1,32 @@
 /* eslint-disable react/jsx-no-target-blank */
 
 import { Link } from "react-router-dom";
-
+import { TwitterOutlined } from '@ant-design/icons';
+import { EnvironmentOutlined } from '@ant-design/icons';
+import { PhoneOutlined } from '@ant-design/icons';
+import { MailOutlined } from '@ant-design/icons';
 const title = "About ShopCart";
 const desc =
-  "Eduaid theme number one world class university in the world There are student are studing always in this university for all time.";
+  "Nestled in the bustling Dai Co Viet street lies CartShop – a shoe haven. Its vibrant displays showcase a diverse range of footwear, from trendy sneakers to timeless classics.";
 const ItemTitle = "Categories";
 const quickTitle = "Quick Links";
 const tweetTitle = "Recent Tweets";
 
 const addressList = [
   {
-    iconName: "icofont-google-map",
-    text: "New York, USA.",
+    //iconName: "icofont-google-map",
+    icon: <EnvironmentOutlined/>,
+    text: " Hanoi, Vietnam",
   },
   {
-    iconName: "icofont-phone",
-    text: "+880 123 456 789",
+    //iconName: "icofont-phone",
+    icon: <PhoneOutlined/>,
+    text: " +84969776495",
   },
   {
-    iconName: "icofont-envelope",
-    text: "info@shopcart.com",
+    //iconName: "icofont-envelope",
+    icon: <MailOutlined/>,
+    text: " info@shopcart.com",
   },
 ];
 
@@ -42,12 +48,8 @@ const ItemList = [
     link: "/about",
   },
   {
-    text: "Policy",
-    link: "#",
-  },
-  {
-    text: "FAQs",
-    link: "/about",
+    text: "Contact",
+    link: "/contact",
   },
 ];
 
@@ -80,20 +82,20 @@ const quickList = [
 
 const tweetList = [
   {
-    iconName: "icofont-twitter",
+    iconName: <TwitterOutlined/>,
     desc: (
       <p>
-        Aminur islam <a href="#">@ShopCart Greetings! #HTML_Template</a> Grab
-        your item, 50% Big Sale Offer !!
+        Kevin De Bruyne
+        <p>Grab your item, 50% Big Sale Offer !! </p>
       </p>
     ),
   },
   {
-    iconName: "icofont-twitter",
+    iconName: <TwitterOutlined/>,
     desc: (
       <p>
-        Somrat islam <a href="#">@ShopCart Hey! #HTML_Template</a> Grab your
-        item, 50% Big Sale Offer !!
+        Harry Kane
+        <p>Grab your item, New Products come !! </p>
       </p>
     ),
   },
@@ -136,7 +138,7 @@ const Footer = () => {
                       <ul className="lab-ul office-address">
                         {addressList.map((val, i) => (
                           <li key={i}>
-                            <i className={val.iconName}></i>
+                            {val.icon}
                             {val.text}
                           </li>
                         ))}
@@ -197,7 +199,7 @@ const Footer = () => {
                       <ul className="lab-ul">
                         {tweetList.map((val, i) => (
                           <li key={i}>
-                            <i className={val.iconName}></i>
+                            {/* {val.iconName} */}
                             {val.desc}
                           </li>
                         ))}

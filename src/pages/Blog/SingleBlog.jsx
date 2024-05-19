@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import blogList from "../../data/blog.json";
 import MostPopularPost from "./MostPopularPost";
 import BreadCrumb from "../../components/Breadcrumb/BreadCrumb";
-import Tags from "../Shop/Tags";
+import { CalendarOutlined } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
+
 import { Link } from "react-router-dom";
 const socialList = [
   {
@@ -64,23 +66,13 @@ const SingleBlog = () => {
                                 <h2>{item.title}</h2>
                                 <div className="meta-post">
                                   <ul className="lab-ul">
-                                    <li>
-                                      <a href="#">
-                                        <i className="icofont-calendar"></i>
-                                        April 23,2021
-                                      </a>
+                                    <li style={{ display: 'flex', alignItems: 'center' }}>
+                                      <CalendarOutlined style={{ marginRight: '8px' }} />
+                                      April 23, 2021
                                     </li>
-                                    <li>
-                                      <a href="#">
-                                        <i className="icofont-ui-user"></i>Rajib
-                                        Raj
-                                      </a>
-                                    </li>
-                                    <li>
-                                      <a href="#">
-                                        <i className="icofont-speech-comments"></i>
-                                        09 Comments
-                                      </a>
+                                    <li style={{ display: 'flex', alignItems: 'center' }}>
+                                      <UserOutlined  style={{ marginRight: '8px' }} />
+                                      Haaland
                                     </li>
                                   </ul>
                                 </div>
@@ -110,9 +102,6 @@ const SingleBlog = () => {
                                     deliverables uolisticly extend aserser are
                                     diverse vortals.{" "}
                                   </p>
-                                  <cite>
-                                    <a href="#">...Melissa Hunter</a>
-                                  </cite>
                                 </blockquote>
 
                                 <p>
@@ -241,7 +230,6 @@ const SingleBlog = () => {
             </div>
             <div className="col-lg-4 col-12">
               <aside>
-                <Tags />
                 <MostPopularPost />
               </aside>
             </div>

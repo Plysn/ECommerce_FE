@@ -80,13 +80,7 @@ const Review = () => {
         </div>
         <div className="description">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            The quality of these shoes is excellent. From the durable materials used to their meticulous craftsmanship, every aspect speaks of high standards. The stitching is impeccable, ensuring longevity, while the materials feel sturdy yet comfortable. Not only are they stylish, but they also provide ample support and comfort for long hours of wear. Overall, these shoes exemplify top-notch quality and are certainly worth the investment.
           </p>
         </div>
       </div>

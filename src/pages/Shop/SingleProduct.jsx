@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Tags from "./Tags";
 import BreadCrumb from "../../components/Breadcrumb/BreadCrumb";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -89,7 +88,6 @@ const SingleProduct = () => {
             <div className="col-lg-4 col-md-7 col-12">
               <aside className="ps-lg-4">
                 <MostPopularPost />
-                <Tags />
               </aside>
             </div>
           </div>

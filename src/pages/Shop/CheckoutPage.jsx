@@ -1,9 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const CheckoutPage = () => {
+const axiosInstance = axios.create({
+  baseURL: 'https://ecommercebackend-953d.up.railway.app/api',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+// Thiết lập một interceptor để thêm Bearer Token vào mỗi yêu cầu
+axiosInstance.interceptors.request.use(config => {
+  const token = JSON.parse(localStorage.getItem('access_token'));
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
+const CheckoutPage = (props) => {
   const [show, setShow] = useState(false);
   const [activeTab, setActiveTab] = useState("visa"); // Initial active tab
 
@@ -15,15 +34,28 @@ const CheckoutPage = () => {
   const handleShow = () => setShow(true);
 
   // order confirmation and redirect to home page
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const from = location.state?.from?.pathname || "/";
 
-  const handleOrderConfirm = () => {
-    alert("Your order placed successfully!");
-    localStorage.removeItem("cart");
-    navigate(from, { replace: true });
+  const handleOrderConfirm = async (e) => {
+    const paymentMethod = activeTab === "visa" ? "visa" : "paypal";
+    try {
+      const response = await axiosInstance.post(`/orders/create`, {
+        amount: props.amount, // Include the amount in the request body
+        paymentMethod: paymentMethod // Include the payment method in the request body
+      });
+      console.log('Order created: ', response.data);
+      const orderId = response.data.data.id;
+      console.log(orderId)
+      setShow(false);
+      navigate(`/order-details/${orderId}`, { state: {
+        orderId: response.data.data.id,
+        amount: response.data.data.amount,
+        paymentMethod: response.data.data.payment_method
+    } });
+    } catch (error) {
+      console.error('Error creating order', error.response?.data || error.message);
+    }
   };
 
   return (
@@ -47,8 +79,7 @@ const CheckoutPage = () => {
                 <ul className="nav nav-tabs" id="myTab" role="tablist">
                   <li className="nav-item" role="presentation">
                     <a
-                      className={`nav-link ${activeTab === "visa" ? "active" : ""
-                        }`}
+                      className={`nav-link ${activeTab === "visa" ? "active" : ""}`}
                       id="visa-tab"
                       data-toggle="tab"
                       href="#visa"
@@ -62,8 +93,7 @@ const CheckoutPage = () => {
                   </li>
                   <li className="nav-item" role="presentation">
                     <a
-                      className={`nav-link ${activeTab === "paypal" ? "active" : ""
-                        }`}
+                      className={`nav-link ${activeTab === "paypal" ? "active" : ""}`}
                       id="paypal-tab"
                       data-toggle="tab"
                       href="#paypal"
@@ -79,14 +109,13 @@ const CheckoutPage = () => {
                 <div className="tab-content" id="myTabContent">
                   {/* visa content */}
                   <div
-                    className={`tab-pane fade ${activeTab === "visa" ? "show active" : ""
-                      }`}
+                    className={`tab-pane fade ${activeTab === "visa" ? "show active" : ""}`}
                     id="visa"
                     role="tabpanel"
                     aria-labelledby="visa-tab"
                   >
                     {/* Visa tab content */}
-                    <div className="mt-4 mx-4">
+                    {/* <div className="mt-4 mx-4">
                       <div className="text-center">
                         <h5>Credit card</h5>
                       </div>
@@ -144,80 +173,134 @@ const CheckoutPage = () => {
                           </button>
                         </div>
                       </div>
+                    </div> */}
+                    <div>
+  {/* Cardholder Name */}
+                      <div className="inputbox">
+                        <span>Cardholder Name</span>
+                        <input
+                          type="text"
+                          name="name"
+                          className="form-control"
+                          required="required"
+                          placeholder="Phil Foden"
+                        />
+                        
+                      </div>
+
+                      {/* Card Number */}
+                      <div className="inputbox">
+                        <span>Card Number</span> <i className="fa fa-eye"></i>
+                        <input
+                          type="text"
+                          name="name"
+                          className="form-control"
+                          required="required"
+                          placeholder="1604 2004 2810 2003"
+                        />
+                        
+                      </div>
+
+                      {/* Exp Date and CVV */}
+                      <div className="d-flex flex-row">
+
+                        <div className="inputbox">
+                          <span>Exp Date</span>
+                          <input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            required="required"
+                            placeholder="08/26"
+                          />
+                          
+                        </div>
+                        <div className="inputbox">
+                          <span>CVV</span>
+                          <input
+                            type="text"
+                            name="name"
+                            className="form-control"
+                            required="required"
+                            placeholder="219"
+                          />
+                          
+                        </div>
+                      </div>
+                      <div className="px-5 pay">
+                          <button
+                            className="btn btn-success btn-block"
+                            onClick={handleOrderConfirm}
+                          >
+                            Add card
+                          </button>
+                      </div>
                     </div>
+
                   </div>
                   {/* paypal content */}
+
                   <div
-                    className={`tab-pane fade ${activeTab === "paypal" ? "show active" : ""
-                      }`}
+                    className={`tab-pane fade ${activeTab === "paypal" ? "show active" : ""}`}
                     id="paypal"
                     role="tabpanel"
                     aria-labelledby="paypal-tab"
                   >
                     {/* Paypal tab content */}
-                    <div className="mx-4 mt-4">
-                      <div className="text-center">
-                        <h5>Paypal Account Info</h5>
+                    <div>
+                      {/* Name */}
+                      <div className="inputbox">
+                        <span>Name</span>
+                        <input
+                          type="text"
+                          name="name"
+                          className="form-control"
+                          required="required"
+                          placeholder="Phil Foden"
+                        />
+                        
                       </div>
-                      <div className="form mt-3">
-                        <div className="inputbox">
-                          <input
-                            type="text"
-                            name="name"
-                            className="form-control"
-                            required="required"
-                          />
-                          <span>Enter your email</span>
-                        </div>
-                        <div className="inputbox">
-                          <input
-                            type="text"
-                            name="name"
-                            min="1"
-                            max="999"
-                            className="form-control"
-                            required="required"
-                          />
-                          <span>Your Name</span>
-                        </div>
-                        <div className="d-flex flex-row">
-                          <div className="inputbox">
-                            <input
-                              type="text"
-                              name="name"
-                              min="1"
-                              max="999"
-                              className="form-control"
-                              required="required"
-                            />
-                            <span>Extra Info</span>
-                          </div>
-                          <div className="inputbox">
-                            <input
-                              type="text"
-                              name="name"
-                              min="1"
-                              max="999"
-                              className="form-control"
-                              required="required"
-                            />
-                            <span></span>
-                          </div>
-                        </div>
-                        <div className="pay px-5">
-                          <button
-                            className="btn btn-primary btn-block"
-                            onClick={handleOrderConfirm}
-                          >
-                            Add paypal
-                          </button>
-                        </div>
+
+                      {/* Email */}
+                      <div className="inputbox">
+                        <span>Email</span>
+                        <input
+                          type="email"
+                          name="email"
+                          className="form-control"
+                          required="required"
+                          // pattern="[a-z0-9._%+-]+@gmail.com"
+                          placeholder="cartshopweb@gmail.com"
+                        />
+                        
                       </div>
+
+                      {/* Password */}
+                      <div className="inputbox">
+                        <span>Password</span>
+                        <input
+                          type="password"
+                          name="password"
+                          className="form-control"
+                          required="required"
+                          minLength="8"
+                          // placeholder="********"
+                        />
+                        
+                      </div>
+                    </div>
+                    <div className="px-5 pay">
+                      <button
+                        className="btn btn-success btn-block"
+                        onClick={handleOrderConfirm}
+                      >
+                        Add paypal
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* payment desclaimer */}
+              {/* payment disclaimer */}
               <p className="mt-3 px-4 p-Disclaimer">
                 <em>Payment Disclaimer:</em> In no event shall payment or
                 partial payment by Owner for any material or service

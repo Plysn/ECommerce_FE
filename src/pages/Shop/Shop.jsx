@@ -1,19 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BreadCrumb from "../../components/Breadcrumb/BreadCrumb";
-import { useState, useEffect } from "react";
 import Search from "./Search";
 import Pagination from "./Pagination";
 import ShopCategory from "./ShopCategory";
-import Tags from "./Tags";
 import ProductCards from "./ProductCards";
-const showResult = "Showing 01 - 12 of 139 Results";
 import MostPopularPost from "../Blog/MostPopularPost";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 const Shop = () => {
   const { id } = useParams();
-  const [GridList, setGridList] = useState(true);
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,11 +17,13 @@ const Shop = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`https://ecommercebackend-953d.up.railway.app/api/products`);
+      const response = await axios.get(
+        `https://ecommercebackend-953d.up.railway.app/api/products`
+      );
       setProducts(response.data.data);
       console.log(response);
     } catch (error) {
-      console.error('Lỗi khi lấy dữ liệu sản phẩm:', error);
+      console.error("Error fetching product data:", error);
     }
   };
 
@@ -46,7 +44,7 @@ const Shop = () => {
   };
 
   // category based filtering
-  const menuItems = [...new Set(products.map((Val) => Val.seller))];
+  const menuItems = [...new Set(products.map((val) => val.seller))];
 
   const filterItem = (curcat) => {
     if (curcat === "All") {
@@ -62,7 +60,10 @@ const Shop = () => {
 
   return (
     <div>
-      <BreadCrumb title={"Our Shop Pages"} curPage={<Link to="/shop">Shop</Link>} />
+      <BreadCrumb
+        title={"Our Shop Pages"}
+        curPage={<Link to="/shop">Shop</Link>}
+      />
 
       {/* shop page */}
       <div className="shop-page padding-tb">
@@ -70,27 +71,16 @@ const Shop = () => {
           <div className="row justify-content-center">
             <div className="col-lg-8 col-12">
               <article>
-                <div className="shop-title d-flex flex-wrap justify-content-between">
-                  <p>{showResult}</p>
-                  <div
-                    className={`product-view-mode ${
-                      GridList ? "gridActive" : "listActive"
-                    }`}
-                  >
-                    <a className="grid" onClick={() => setGridList(!GridList)}>
-                      <i className="icofont-ghost"></i>
-                    </a>
-                    <a className="list" onClick={() => setGridList(!GridList)}>
-                      <i className="icofont-listine-dots"></i>
-                    </a>
-                  </div>
+                <div className="shop-title">
+                  <p className="showResult">
+                    Showing {indexOfFirstProduct + 1} -{" "}
+                    {Math.min(indexOfLastProduct, products.length)} of{" "}
+                    {products.length} Results
+                  </p>
                 </div>
 
                 <div>
-                  <ProductCards
-                    products={currentProducts}
-                    GridList={GridList}
-                  />
+                  <ProductCards products={currentProducts} GridList={true} />
                 </div>
 
                 <Pagination
@@ -103,14 +93,13 @@ const Shop = () => {
             </div>
             <div className="col-lg-4 col-12">
               <aside>
-                <Search products={products} GridList={GridList} />
+                <Search products={products} GridList={true} />
                 <ShopCategory
                   filterItem={filterItem}
                   setProducts={setProducts}
                   selectedCategory={selectedCategory}
                 />
                 <MostPopularPost />
-                <Tags />
               </aside>
             </div>
           </div>

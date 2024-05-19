@@ -1,7 +1,7 @@
 // /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import SearchOutlined from "@ant-design/icons/SearchOutlined";
 const Search = ({ products, GridList }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -19,7 +19,7 @@ const Search = ({ products, GridList }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button type="submit">
-          <i className="icofont-search-2"></i>
+          <SearchOutlined/>
         </button>
       </form>
 

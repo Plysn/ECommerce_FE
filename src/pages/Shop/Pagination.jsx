@@ -1,6 +1,5 @@
-// /* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React from "react";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 const Pagination = ({
   productsPerPage,
@@ -21,11 +20,11 @@ const Pagination = ({
           href="#"
           onClick={() => {
             if (activePage < pageNumbers.length) {
-              paginate(activePage - 1); // Navigate to the next page
+              paginate(activePage - 1); // Navigate to the previous page
             }
           }}
         >
-          <i className="icofont-rounded-left"></i>
+          <LeftOutlined />
         </a>
       </li>
 
@@ -49,7 +48,7 @@ const Pagination = ({
             }
           }}
         >
-          <i className="icofont-rounded-right"></i>
+          <RightOutlined />
         </a>
       </li>
     </ul>

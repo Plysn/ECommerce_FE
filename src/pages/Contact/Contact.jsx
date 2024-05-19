@@ -13,7 +13,7 @@ const contactList = [
     imgUrl: "/src/assets/images/icon/01.png",
     imgAlt: "contact icon",
     title: "Office Address",
-    desc: "HaNoi University of science and technology ",
+    desc: "Hanoi University of Science and Technology ",
   },
   {
     imgUrl: "/src/assets/images/icon/02.png",
@@ -69,7 +69,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
-      <div className="contact-section padding-tb">
+      {/* <div className="contact-section padding-tb">
         <div className="container">
           <div className="section-header text-center">
             <span className="subtitle">{conSubTitle}</span>
@@ -112,7 +112,7 @@ const Contact = () => {
             </form>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

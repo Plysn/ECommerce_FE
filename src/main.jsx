@@ -24,9 +24,10 @@ import Shop from "./pages/Shop/Shop.jsx";
 import SingleProduct from "./pages/Shop/SingleProduct.jsx";
 // import PrivateRoute from "./PrivateRoute.jsx";
 import Contact from "./pages/Contact/Contact.jsx";
+import OrderDetails from "./pages/Shop/OrderDetails.jsx";
 import About from "./pages/About/About.jsx";
 import ForgetPassword from "./pages/SignIn/FogetPassword.jsx";
-
+import Orders from "./pages/Shop/Orders.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -88,6 +89,14 @@ const router = createBrowserRouter([
         path: "shop/:id",
         element: <SingleProduct />,
       },
+      {
+        path: "/order-details/:orderId", // Add the route for OrderDetails
+        element: <OrderDetails />,
+      },
+      {
+        path: "/orders",
+        element: <Orders />
+      }
     ],
   },
   {
