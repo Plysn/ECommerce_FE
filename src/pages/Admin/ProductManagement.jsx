@@ -139,18 +139,9 @@ const ProductAdminPage = () => {
 
   const handleOk = async () => {
     const values = await form.validateFields();
-    // console.log("values", values);
-
-    // const dataForm = new FormData();
-    // Object.keys(values).forEach((key) => {
-    //   dataForm.append(key, values[key]);
-    // });
-    // console.log(dataForm);
     if (fileList.length > 0) {
-      // dataForm.append("img", fileList[0].originFileObj);
       values.img = fileList[0].originFileObj;
     }
-    // values.img = console.log("form", fileList[0].originFileObj);
     try {
       await productApi.postProduct(values);
       setVisible(false);
@@ -158,8 +149,9 @@ const ProductAdminPage = () => {
       message.success("Product added successfully");
     } catch (error) {
       if (error.response.data.message === "image is not allowed") {
-        message.error("Select product image");
+        message.error("Please select product image");
       }
+      message.error("Product cannot be added!");
     }
   };
 
@@ -177,17 +169,22 @@ const ProductAdminPage = () => {
 
   const handleOkEdit = async (id) => {
     const values = await form.validateFields();
+    if (fileList.length > 0) {
+      values.img = fileList[0].originFileObj;
+    }
     try {
-      await productApi.updateProduct(id, { ...values });
-      message.success("Product updated successfully");
+      await productApi.update(id, values);
       setVisibleEdit(false);
       fetchData();
+      message.success("Product updated successfully");
     } catch (error) {
       if (error.response.data.message === "image is not allowed") {
-        message.error("Please select product photo!");
+        message.error("Please select product image");
       }
+      message.error("Product cannot be updated!");
     }
   };
+
   const handleCancelEdit = () => {
     setVisibleEdit(false);
   };
@@ -204,15 +201,6 @@ const ProductAdminPage = () => {
     (product) =>
       filterCategory === "" || product.category.name === filterCategory
   );
-
-  // 'img=@anh-dep-cuu-trai-cau-bac-thang (1).jpg;type=image/jpeg'
-
-  // Upload image
-  // const handleFileChange = ({ fileList }) => {
-  //   const imageUrls = fileList.map((file) => file.name);
-  //   const imageUrlString = imageUrls.join(", ");
-  //   form.setFieldsValue({ img: imageUrlString });
-  // };
 
   const handleFileChange = ({ fileList }) => {
     setFileList(fileList);
@@ -309,7 +297,6 @@ const ProductAdminPage = () => {
                 itemRender={handleRender}
                 accept="image/png, image/jpeg"
                 fileList={fileList}
-                // maxCount={1}
                 onChange={(fileList) => handleFileChange(fileList)}
               >
                 <div className="btn-upload">
@@ -350,6 +337,9 @@ const ProductAdminPage = () => {
             <Form.Item label="Price" name="price">
               <Input />
             </Form.Item>
+            <Form.Item label="Seller" name="seller">
+              <Input />
+            </Form.Item>
             <Form.Item label="Quantity" name="stock">
               <InputNumber />
             </Form.Item>
@@ -361,11 +351,12 @@ const ProductAdminPage = () => {
                 listType="picture-card"
                 itemRender={handleRender}
                 accept="image/png, image/jpeg"
+                fileList={fileList}
                 onChange={(fileList) => handleFileChange(fileList)}
               >
                 <div className="btn-upload">
-                  <PlusOutlined className="fz-25" />
-                  <span className="btn-text fz-11 sub-color-text">Upload</span>
+                  <PlusOutlined />
+                  <span className="btn-text">Upload</span>
                 </div>
               </Upload>
             </Form.Item>

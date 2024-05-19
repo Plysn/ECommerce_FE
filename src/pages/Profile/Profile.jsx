@@ -61,6 +61,7 @@ const Profile = () => {
     try {
       const response = await usersApi.getUserInfo(userId);
       setUserInfo(response.data.data);
+      console.log(userInfo);
     } catch (error) {
       console.log("An error occurred! Please try again.");
     }
@@ -126,7 +127,7 @@ const Profile = () => {
         <div id="about" className="home row">
           <div className="image-box">
             <img
-              src="https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.668xw:1.00xh;0.119xw,0&resize=1200:*"
+              src={userInfo?.picture}
               alt="avt-user"
             />
           </div>
@@ -295,9 +296,9 @@ const Profile = () => {
                                   disabled={!changeInfoAble}
                                   style={{ marginBottom: 10 }}
                                 >
+                                  <option value="saab">Hai Bà Trưng</option>
                                   <option value="volvo">Đống Đa</option>
                                   <option value="saab">Thanh Xuân</option>
-                                  <option value="saab">Hai Bà Trưng</option>
                                   <option value="saab">Ba Đình</option>
                                   <option value="saab">Hoang Mai</option>
                                 </select>

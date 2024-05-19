@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   message,
+  Tag
 } from "antd";
 import "../../assets/css/admin.css";
 import usersApi from "../../services/users";
@@ -55,6 +56,7 @@ const UserMangement = () => {
   };
 
   const handleCancelDelete = () => {
+    console.log("Clicked cancel button");
     setIsModalVisible(false);
   };
   const handleOk = async () => {
@@ -87,6 +89,9 @@ const UserMangement = () => {
       title: "Role",
       dataIndex: "role",
       key: "role",
+      render: (record) => (
+        record === "admin" ? <Tag color="volcano">ADMIN</Tag> : <Tag color="blue">USER</Tag>
+      )
     },
     {
       title: "Phone",
@@ -114,7 +119,7 @@ const UserMangement = () => {
                 title="Confirm Delete"
                 visible={isModalVisible}
                 onOk={() => handleOkDelete(record.id)}
-                onCancel={() => handleCancelDelete}
+                onCancel={handleCancelDelete}
               >
                 <p>Are you sure you want to delete this user?</p>
               </Modal>

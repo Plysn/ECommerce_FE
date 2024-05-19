@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Table, Space, Button, Select, message, Modal } from "antd";
+import { Table, Space, Button, Select, message, Modal, Tag } from "antd";
 import "../../assets/css/admin.css";
 import orderApi from "../../services/oder";
 
@@ -46,7 +46,7 @@ const OrderManagement = () => {
 
   const handleViewDetails = (record) => {
     setIsModalVisible(true);
-    handleGetDataDetails(record.id);
+    handleGetDataDetails(record);
   };
   const handleOkDetails = () => {
     setIsModalVisible(false);
@@ -114,16 +114,17 @@ const OrderManagement = () => {
       title: "Product Name",
       dataIndex: "id",
       key: "id",
-      render: (record) => (
-        <div
+      render: (record) => {
+        console.log(record);
+        return (<div
           style={{ color: "#1677ff", cursor: "pointer" }}
           onClick={() => {
             handleViewDetails(record);
           }}
         >
           See more
-        </div>
-      ),
+        </div>)
+      }
     },
     {
       title: "Price",
@@ -140,6 +141,13 @@ const OrderManagement = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (record) => (
+        <>
+          {record === "created" && <Tag color="volcano">CREATED</Tag>}
+          {record === "shipping" && <Tag color="blue">SHIPPING</Tag>}
+          {record === "shipped" && <Tag color="green">SHIPPED</Tag>}
+        </>
+      )
     },
     {
       title: "Oder by",

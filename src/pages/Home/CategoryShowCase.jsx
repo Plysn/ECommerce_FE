@@ -73,6 +73,15 @@ const CategoryShowCase = ({ products }) => {
                             </div>
                           </div>
                         </div>
+                        <div style={{
+                          padding: '6px 15px',
+                          width: '220px',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}>
+                          {elem.name}
+                        </div>
                       </div>
                     </div>
                   </div>
