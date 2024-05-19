@@ -22,7 +22,7 @@ import Blog from "./pages/Blog/Blog.jsx";
 import SingleBlog from "./pages/Blog/SingleBlog.jsx";
 import Shop from "./pages/Shop/Shop.jsx";
 import SingleProduct from "./pages/Shop/SingleProduct.jsx";
-// import PrivateRoute from "./PrivateRoute.jsx";
+import PrivateRoute from "./PrivateRoute.jsx";
 import Contact from "./pages/Contact/Contact.jsx";
 import OrderDetails from "./pages/Shop/OrderDetails.jsx";
 import About from "./pages/About/About.jsx";
@@ -60,25 +60,25 @@ const router = createBrowserRouter([
       {
         path: "/cart-page",
         element: (
-          // <PrivateRoute roles={["user", "admin"]}>
-          <CartPage />
-          // </PrivateRoute>
+          <PrivateRoute roles={["user", "admin"]}>
+            <CartPage />
+          </PrivateRoute>
         ),
       },
       {
         path: "/admin",
         element: (
-          // <PrivateRoute roles={["admin"]}>
-          <ProductAdminPage />
-          // </PrivateRoute>
+          <PrivateRoute roles={["admin"]}>
+            <ProductAdminPage />
+          </PrivateRoute>
         ),
       },
       {
         path: "/profile",
         element: (
-          // <PrivateRoute roles={["user", "admin"]}>
-          <Profile />
-          // </PrivateRoute>
+          <PrivateRoute roles={["user", "admin"]}>
+            <Profile />
+          </PrivateRoute>
         ),
       },
       {

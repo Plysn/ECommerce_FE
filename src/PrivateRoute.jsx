@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 
-const PrivateRoute = ({ roles }) => {
+const PrivateRoute = ({ roles, children }) => {
   const location = useLocation();
   const userItem = localStorage.getItem("user");
   const access_token = localStorage.getItem("access_token");
@@ -15,6 +15,8 @@ const PrivateRoute = ({ roles }) => {
   if (!user || !roles.includes(user.role)) {
     return <Navigate to="/sign-in" state={{ from: location }} />;
   }
+
+  return children;
 };
 
 export default PrivateRoute;

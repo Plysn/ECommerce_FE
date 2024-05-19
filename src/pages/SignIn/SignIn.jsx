@@ -24,23 +24,22 @@ const SignIn = () => {
       });
 
       if (response.status === 200) {
-        console.log(response.data.data);
         localStorage.setItem("user", JSON.stringify(response.data.data));
         localStorage.setItem(
           "access_token",
           JSON.stringify(response.data.access_token)
         );
-        message.success("Đăng nhập thành công!");
+        message.success("Logged in successfully!");
         navigate("/");
       }
     } catch (error) {
-      message.error("Đăng nhập thất bại! Vui lòng thử lại.");
+      message.error("Login failed! Please try again.");
       if (error.response) {
         if (error.response.status === 404 || error.response.status === 402) {
-          setErrorMessage("Mật khẩu không hợp lệ! Vui lòng thử lại.");
+          setErrorMessage("Invalid password! Please try again.");
         }
         if (error.response.status === 422) {
-          setErrorMessage("Email không hợp lệ! Vui lòng thử lại.");
+          setErrorMessage("Invalid email! Please try again.");
         }
       } else {
         console.log("Error making request:", error);
@@ -55,7 +54,7 @@ const SignIn = () => {
         window.open(`${response.data.data}`, "_blank");
       }
     } catch (error) {
-      message.error("Đăng nhập thất bại! Vui lòng thử lại.");
+      message.error("Login failed! Please try again.");
       console.log("Error making request:", error);
     }
   };

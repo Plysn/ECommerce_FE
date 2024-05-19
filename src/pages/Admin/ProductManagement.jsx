@@ -31,6 +31,7 @@ const ProductAdminPage = () => {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [productImg, setProductImg] = useState("");
+  const [fileList, setFileList] = useState([]);
 
   // get data product and category
   const fetchData = async () => {
@@ -138,8 +139,17 @@ const ProductAdminPage = () => {
 
   const handleOk = async () => {
     const values = await form.validateFields();
+    console.log("values", values);
+    const dataForm = new FormData();
+    Object.keys(values).forEach((key) => {
+      dataForm.append(key, values[key]);
+    });
+    if (fileList.length > 0) {
+      dataForm.append("img", fileList[0].originFileObj);
+    }
+    console.log("form", fileList[0].originFileObj);
     try {
-      await productApi.postProduct(values);
+      await productApi.postProduct(dataForm);
       setVisible(false);
       fetchData();
       message.success("Product added successfully");
@@ -171,7 +181,7 @@ const ProductAdminPage = () => {
       fetchData();
     } catch (error) {
       if (error.response.data.message === "image is not allowed") {
-        message.error("Vui lòng chọn ảnh sản phẩm");
+        message.error("Please select product photo!");
       }
     }
   };
@@ -192,12 +202,21 @@ const ProductAdminPage = () => {
       filterCategory === "" || product.category.name === filterCategory
   );
 
+
+  // 'img=@anh-dep-cuu-trai-cau-bac-thang (1).jpg;type=image/jpeg'
+
   // Upload image
+  // const handleFileChange = ({ fileList }) => {
+  //   const imageUrls = fileList.map((file) => file.name);
+  //   const imageUrlString = imageUrls.join(", ");
+  //   form.setFieldsValue({ img: imageUrlString });
+  // };
+
   const handleFileChange = ({ fileList }) => {
-    const imageUrls = fileList.map((file) => file.name);
-    const imageUrlString = imageUrls.join(", ");
-    form.setFieldsValue({ img: imageUrlString });
+    setFileList(fileList);
   };
+
+
 
   const handleRemoveImage = async (img, action) => {
     action.remove(img);
@@ -289,7 +308,8 @@ const ProductAdminPage = () => {
                 listType="picture-card"
                 itemRender={handleRender}
                 accept="image/png, image/jpeg"
-                maxCount={1}
+                fileList={fileList}
+                // maxCount={1}
                 onChange={(fileList) => handleFileChange(fileList)}
               >
                 <div className="btn-upload">

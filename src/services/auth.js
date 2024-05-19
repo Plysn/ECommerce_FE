@@ -13,6 +13,9 @@ const authApi = {
   signinWithGoogle() {
     return api.get("/auth/google");
   },
+  resetPassword(params) {
+    return api.post("/auth/reset-password", params);
+  }
 };
 
 export default authApi;

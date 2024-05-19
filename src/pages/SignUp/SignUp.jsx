@@ -30,16 +30,21 @@ const SignUp = () => {
       });
 
       if (response.status === 200) {
-        message.success("Đăng ký tài khoản thành công!");
-        navigate("/sign-in");
+        localStorage.setItem("user", JSON.stringify(response.data.data));
+        localStorage.setItem(
+          "access_token",
+          JSON.stringify(response.data.access_token)
+        );
+        message.success("Account registration successful!");
+        navigate("/");
       }
     } catch (error) {
-      message.error("Đăng ký tài khoản thất bại! Vui lòng thử lại.");
+      message.error("Account registration failed! Please try again.");
       if (error.response.status === 404) {
-        setErrorMessage("Email đã được sử dụng! Vui lòng chọn email khác.");
+        setErrorMessage("Email has been used! Please choose another email.");
       }
       if (error.response.status === 422) {
-        setErrorMessage("Vui lòng nhập mật khẩu có ít nhất 8 ký tự.");
+        setErrorMessage("Please enter a password with at least 8 characters.");
       }
     }
   };

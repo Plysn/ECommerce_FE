@@ -3,11 +3,15 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/images/logo/logo.png";
 import { NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const NavItems = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const [socialToggle, setSocialToggle] = useState(false);
   const [headerFiexd, setHeaderFiexd] = useState(false);
+  const userCookie = Cookies.get('userInfo');
+  const accessTokenCookie = Cookies.get('access_token');
+  console.log(userCookie, accessTokenCookie);
   const navigate = useNavigate();
   const handleProfile = () => {
     navigate("/profile");
@@ -43,9 +47,8 @@ const NavItems = () => {
 
   return (
     <header
-      className={`header-section style-4 ${
-        headerFiexd ? "header-fixed fadeInUp" : ""
-      }`}
+      className={`header-section style-4 ${headerFiexd ? "header-fixed fadeInUp" : ""
+        }`}
     >
       {/* ---header botton starts */}
       <div className="header-bottom">

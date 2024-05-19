@@ -1,5 +1,5 @@
 import api from "./baseApi";
-
+import apiImg from "./baseApiImg";
 const productApi = {
   getListProducts() {
     return api.get("/products");
@@ -11,7 +11,7 @@ const productApi = {
     return api.get(`/products/${categoryId}`);
   },
   postProduct(data) {
-    return api.post("/products/create", data);
+    return apiImg.post("/products/create", data);
   },
   updateProduct(id, param) {
     return api.put(`/products/update/${id}`, param);
@@ -19,6 +19,7 @@ const productApi = {
   deleteProduct(id) {
     return api.delete(`/products/delete/${id}`);
   },
+
 };
 
 export default productApi;

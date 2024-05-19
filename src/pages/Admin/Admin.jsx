@@ -26,7 +26,7 @@ const Admin = () => {
   return (
     <Layout style={{ minHeight: '100vh' }} className="admin-page">
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <Menu theme="light" mode="inline" defaultSelectedKeys={['1']} onClick={handleMenuClick} className="side-menu">
+        <Menu theme="light" mode="inline" defaultSelectedKeys='products' onClick={handleMenuClick} className="side-menu">
           <Menu.Item key="products" icon={<ProductOutlined />}>Products
           </Menu.Item>
           <Menu.Item key="order" icon={<ShoppingCartOutlined />}>

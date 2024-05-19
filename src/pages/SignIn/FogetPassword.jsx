@@ -16,10 +16,10 @@ function ForgetPassword() {
         setSuccess(true);
       }
     } catch (error) {
-      if (error?.response?.data?.status === 422) {
-        message.error("Vui lòng kiểm tra lại email");
+      if (error?.response?.data?.status === 404) {
+        message.error("Email does not exist in the system! Please check again!");
       } else {
-        message.error("Vui lòng kiểm tra lại email");
+        message.error("Please check your email again!");
       }
     }
   };
