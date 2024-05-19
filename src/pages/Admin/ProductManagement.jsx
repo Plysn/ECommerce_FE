@@ -139,17 +139,20 @@ const ProductAdminPage = () => {
 
   const handleOk = async () => {
     const values = await form.validateFields();
-    console.log("values", values);
-    const dataForm = new FormData();
-    Object.keys(values).forEach((key) => {
-      dataForm.append(key, values[key]);
-    });
+    // console.log("values", values);
+
+    // const dataForm = new FormData();
+    // Object.keys(values).forEach((key) => {
+    //   dataForm.append(key, values[key]);
+    // });
+    // console.log(dataForm);
     if (fileList.length > 0) {
-      dataForm.append("img", fileList[0].originFileObj);
+      // dataForm.append("img", fileList[0].originFileObj);
+      values.img = fileList[0].originFileObj;
     }
-    console.log("form", fileList[0].originFileObj);
+    // values.img = console.log("form", fileList[0].originFileObj);
     try {
-      await productApi.postProduct(dataForm);
+      await productApi.postProduct(values);
       setVisible(false);
       fetchData();
       message.success("Product added successfully");
@@ -202,7 +205,6 @@ const ProductAdminPage = () => {
       filterCategory === "" || product.category.name === filterCategory
   );
 
-
   // 'img=@anh-dep-cuu-trai-cau-bac-thang (1).jpg;type=image/jpeg'
 
   // Upload image
@@ -215,8 +217,6 @@ const ProductAdminPage = () => {
   const handleFileChange = ({ fileList }) => {
     setFileList(fileList);
   };
-
-
 
   const handleRemoveImage = async (img, action) => {
     action.remove(img);
