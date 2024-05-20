@@ -51,7 +51,8 @@ const SignIn = () => {
     try {
       const response = await authApi.signinWithGoogle();
       if (response.status === 200) {
-        window.open(`${response.data.data}`, "_blank");
+        // window.open(`${response.data.data}`, "_blank");
+        window.location.href = response.data.data
       }
     } catch (error) {
       message.error("Login failed! Please try again.");
