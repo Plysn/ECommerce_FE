@@ -28,6 +28,7 @@ import OrderDetails from "./pages/Shop/OrderDetails.jsx";
 import About from "./pages/About/About.jsx";
 import ForgetPassword from "./pages/SignIn/FogetPassword.jsx";
 import Orders from "./pages/Shop/Orders.jsx";
+import SignInGoogle from "./pages/SignIn/SignInGoogle.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
   {
     path: "/sign-in",
     element: <SignIn />,
+  },
+  {
+    path: "/get-infor",
+    element: <SignInGoogle />
   },
   {
     path: "/sign-up",
