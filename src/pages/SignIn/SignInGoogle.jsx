@@ -9,7 +9,7 @@ const SignInGoogle = () => {
     const [err, setErr] = useState(null);
 
     const api = axios.create({
-        baseURL: 'http://localhost:3000/api',
+        baseURL: 'https://ecommercebackend-953d.up.railway.app/api',
         headers: {
           "accept ": "application/json",
           "Content-Type": "application/json",
@@ -37,11 +37,12 @@ const SignInGoogle = () => {
                 try {
                     const response = await api.post('/auth/google/get-infor', {codeAuth: codeAuth});
                     if (response.status === 200) {
-                        localStorage.setItem("user", JSON.stringify(response.data.data));
+                        localStorage.setItem("user", JSON.stringify(response.data.data.user));
                         localStorage.setItem(
                         "access_token",
-                        JSON.stringify(response.data.access_token)
+                        JSON.stringify(response.data.data.accessToken)
                         );
+                        console.log(response)
                         navigate("/");
                         notification.success({
                             message: "Logged in successfully!",
