@@ -17,8 +17,9 @@ function ForgetPassword() {
       }
     } catch (error) {
       if (error?.response?.data?.status === 404) {
+        // console.log(error)
         message.error(
-          "Email does not exist in the system! Please check again!"
+          error.response.data.message
         );
       } else {
         message.error("Please check your email again!");
