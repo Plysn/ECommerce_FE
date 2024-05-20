@@ -19,10 +19,10 @@ const OrderManagement = () => {
       setOrdersData(response.data.data);
     } catch (error) {
       if (error.response.message === "Unauthorized") {
-        message.error("You are not authorized to view this page! Please login again");
-
-      }
-      else {
+        message.error(
+          "You are not authorized to view this page! Please login again"
+        );
+      } else {
         message.error("An error occurred while fetching products");
       }
     }
@@ -35,10 +35,10 @@ const OrderManagement = () => {
     } catch (error) {
       console.log(error);
       if (error.response.message === "Unauthorized") {
-        message.error("You are not authorized to view this page! Please login again");
-
-      }
-      else {
+        message.error(
+          "You are not authorized to view this page! Please login again"
+        );
+      } else {
         message.error("An error occurred while fetching products");
       }
     }
@@ -115,16 +115,17 @@ const OrderManagement = () => {
       dataIndex: "id",
       key: "id",
       render: (record) => {
-        console.log(record);
-        return (<div
-          style={{ color: "#1677ff", cursor: "pointer" }}
-          onClick={() => {
-            handleViewDetails(record);
-          }}
-        >
-          See more
-        </div>)
-      }
+        return (
+          <div
+            style={{ color: "#1677ff", cursor: "pointer" }}
+            onClick={() => {
+              handleViewDetails(record);
+            }}
+          >
+            See more
+          </div>
+        );
+      },
     },
     {
       title: "Price",
@@ -147,12 +148,25 @@ const OrderManagement = () => {
           {record === "shipping" && <Tag color="blue">SHIPPING</Tag>}
           {record === "shipped" && <Tag color="green">SHIPPED</Tag>}
         </>
-      )
+      ),
     },
     {
       title: "Oder by",
       dataIndex: ["ordered_by", "username"],
       key: "oder_by",
+    },
+    {
+      title: "Address",
+      dataIndex: ["ordered_by", "address"],
+      key: "address",
+      render: (record) => (
+        <>
+          {record && <div style={{ width: "250px" }}>{record}</div>}
+          {!record && (
+            <div style={{ width: "250px" }}>KTX Đại Học Bách Khoa Hà Nội</div>
+          )}
+        </>
+      ),
     },
     {
       title: "Action",
@@ -229,7 +243,11 @@ const OrderManagement = () => {
           <Select.Option value="shipping">Shipping</Select.Option>
           <Select.Option value="shipped">Shipped</Select.Option>
         </Select>
-        <Table columns={columns} dataSource={filteredProducts} />
+        <Table
+          columns={columns}
+          dataSource={filteredProducts}
+          pagination={{ pageSize: 8 }}
+        />
       </div>
       <Modal
         title="Order Details"

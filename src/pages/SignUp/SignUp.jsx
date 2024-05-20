@@ -43,6 +43,13 @@ const SignUp = () => {
       if (error.response.status === 404) {
         setErrorMessage("Email has been used! Please choose another email.");
       }
+      if (
+        error.response.status === 422 &&
+        error.response.message ===
+          "Email is not a valid pattern example214@gmail.com"
+      ) {
+        setErrorMessage("Please enter a valid email.");
+      }
       if (error.response.status === 422) {
         setErrorMessage("Please enter a password with at least 8 characters.");
       }

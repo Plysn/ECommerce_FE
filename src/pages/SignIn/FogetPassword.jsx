@@ -17,7 +17,9 @@ function ForgetPassword() {
       }
     } catch (error) {
       if (error?.response?.data?.status === 404) {
-        message.error("Email does not exist in the system! Please check again!");
+        message.error(
+          "Email does not exist in the system! Please check again!"
+        );
       } else {
         message.error("Please check your email again!");
       }
@@ -58,7 +60,8 @@ function ForgetPassword() {
                   name="password"
                   className="form-group"
                   type="email"
-                  placeholder={"Nhập email của bạn"}
+                  placeholder={"Email Address *"}
+                  style={{ height: "50px" }}
                 />
               </Form.Item>
               <button type="submit" className="d-block lab-btn button-send">

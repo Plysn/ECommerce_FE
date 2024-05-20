@@ -8,7 +8,7 @@ import {
   Input,
   Select,
   message,
-  Tag
+  Tag,
 } from "antd";
 import "../../assets/css/admin.css";
 import usersApi from "../../services/users";
@@ -19,6 +19,7 @@ const UserMangement = () => {
 
   const [visible, setVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedUsertId, setSelectedUserId] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -40,8 +41,9 @@ const UserMangement = () => {
     fetchData();
   }, []);
 
-  const showModal = () => {
+  const showModal = (record) => {
     setIsModalVisible(true);
+    setSelectedUserId(record);
   };
 
   const handleOkDelete = async (id) => {
@@ -89,9 +91,12 @@ const UserMangement = () => {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      render: (record) => (
-        record === "admin" ? <Tag color="volcano">ADMIN</Tag> : <Tag color="blue">USER</Tag>
-      )
+      render: (record) =>
+        record === "admin" ? (
+          <Tag color="volcano">ADMIN</Tag>
+        ) : (
+          <Tag color="blue">USER</Tag>
+        ),
     },
     {
       title: "Phone",
@@ -112,17 +117,9 @@ const UserMangement = () => {
         <Space size="middle">
           {record.role === "admin" ? null : (
             <>
-              <Button type="primary" danger onClick={showModal}>
+              <Button type="primary" danger onClick={() => showModal(record)}>
                 Delete
               </Button>
-              <Modal
-                title="Confirm Delete"
-                visible={isModalVisible}
-                onOk={() => handleOkDelete(record.id)}
-                onCancel={handleCancelDelete}
-              >
-                <p>Are you sure you want to delete this user?</p>
-              </Modal>
             </>
           )}
         </Space>
@@ -156,6 +153,7 @@ const UserMangement = () => {
           className="custom-table"
           columns={columns}
           dataSource={filteredUser}
+          pagination={{ pageSize: 8 }}
         />
         <Modal
           title="Add Admin"
@@ -174,6 +172,17 @@ const UserMangement = () => {
               <Input />
             </Form.Item>
           </Form>
+        </Modal>
+        <Modal
+          title="Confirm Delete"
+          visible={isModalVisible}
+          onOk={() => handleOkDelete(selectedUsertId.id)}
+          onCancel={handleCancelDelete}
+        >
+          <p>
+            Are you sure you want to delete this user?
+            <div>{selectedUsertId?.username}</div>
+          </p>
         </Modal>
       </div>
     </div>

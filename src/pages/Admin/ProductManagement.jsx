@@ -10,6 +10,7 @@ import {
   Select,
   Image,
   InputNumber,
+  Tag,
 } from "antd";
 import "../../assets/css/admin.css";
 import { message } from "antd";
@@ -74,6 +75,9 @@ const ProductAdminPage = () => {
       title: "Quantity",
       dataIndex: "stock",
       key: "quantity",
+      render: (record) => (
+        <span>{record ? record : <Tag color="volcano">SOLD</Tag>}</span>
+      ),
     },
     {
       title: "Action",
@@ -86,17 +90,6 @@ const ProductAdminPage = () => {
           <Button type="primary" danger onClick={() => showModalDelete(record)}>
             Delete
           </Button>
-          <Modal
-            title="Confirm Delete"
-            visible={isModalVisible}
-            onOk={() => handleDelete(selectedRecord.id)}
-            onCancel={() => handleCancelDelete()}
-          >
-            <p>
-              Are you sure you want to delete this product:
-              {selectedRecord?.name}?
-            </p>
-          </Modal>
         </Space>
       ),
     },
@@ -172,12 +165,18 @@ const ProductAdminPage = () => {
     if (fileList.length > 0) {
       values.img = fileList[0].originFileObj;
     }
+    console.log(values);
     try {
-      await productApi.update(id, values);
-      setVisibleEdit(false);
-      fetchData();
-      message.success("Product updated successfully");
+      const res = await productApi.update(id, values);
+      if (res) {
+        setVisibleEdit(false);
+        fetchData();
+        message.success("Product updated successfully");
+      } else {
+        console.error("Response or response.data is undefined");
+      }
     } catch (error) {
+      console.log(error);
       if (error.response.data.message === "image is not allowed") {
         message.error("Please select product image");
       }
@@ -220,7 +219,7 @@ const ProductAdminPage = () => {
       <div className="img-item">
         <CloseCircleFilled
           className="remove-icon fz-16"
-          onClick={() => handleRemoveImage(img, action)}
+          onClick={() => handleRemoveImage(img)}
         />
         <div className="image-container">
           <Image
@@ -254,7 +253,11 @@ const ProductAdminPage = () => {
             </Select.Option>
           ))}
         </Select>
-        <Table columns={columns} dataSource={filteredProducts} />
+        <Table
+          columns={columns}
+          dataSource={filteredProducts}
+          pagination={{ pageSize: 8 }}
+        />
         <Modal
           title="Add Product"
           visible={visible}
@@ -364,6 +367,17 @@ const ProductAdminPage = () => {
               <Input.TextArea />
             </Form.Item>
           </Form>
+        </Modal>
+        <Modal
+          title="Confirm Delete"
+          visible={isModalVisible}
+          onOk={() => handleDelete(selectedRecord.id)}
+          onCancel={() => handleCancelDelete()}
+        >
+          <p>
+            Are you sure you want to delete this product:
+            <div>{selectedRecord?.name}?</div>
+          </p>
         </Modal>
       </div>
     </div>

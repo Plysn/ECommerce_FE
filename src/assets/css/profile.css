@@ -18,7 +18,7 @@ strong {
 body {
   background-color: #f7f7ff !important;
   font-family: "mouse-300", Arial, Helvetica, sans-serif;
-  color: #6A6A6A;
+  color: #6a6a6a;
 }
 
 .session-title {
@@ -144,7 +144,8 @@ body {
 }
 
 .btn {
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
   border-radius: 2px;
 }
 
@@ -154,8 +155,8 @@ body {
 }
 
 .btn-light {
-  background-color: #FFF;
-  color: #3F3F3F;
+  background-color: #fff;
+  color: #3f3f3f;
 }
 
 .collapse.show {
@@ -168,13 +169,13 @@ body {
 }
 
 .form-control {
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
   margin-bottom: 20px;
 }
 
 .form-control:focus {
-  background-color: #FFF;
-  border-color: #CCC;
+  background-color: #fff;
+  border-color: #ccc;
 }
 
 .container {
@@ -198,7 +199,7 @@ body {
 .profile-box {
   width: 1050px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 @media screen and (max-width: 1070px) {
@@ -214,7 +215,8 @@ body {
 }
 
 .profile-box .head-top {
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
   border-radius: 2px;
 }
 
@@ -238,14 +240,14 @@ body {
 @media screen and (max-width: 504px) {
   .profile-box .head-top ul li {
     padding: 10px;
-    font-size: .9rem;
+    font-size: 0.9rem;
   }
 }
 
 @media screen and (max-width: 469px) {
   .profile-box .head-top ul li {
     padding: 8px;
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -262,7 +264,7 @@ body {
 }
 
 .profile-box .head-top ul .act {
-  border-bottom: 2px solid #4BBB5A;
+  border-bottom: 2px solid #4bbb5a;
 }
 
 .profile-box .home {
@@ -272,11 +274,11 @@ body {
 }
 
 .profile-box .home .image-box {
-  width: 320px;
-  height: 320px;
+  width: 172px;
+  height: 172px;
   margin: auto;
   border-radius: 50%;
-  border: 1px dotted #CCC;
+  border: 1px dotted #ccc;
   padding: 30px;
 }
 
@@ -289,7 +291,7 @@ body {
 .profile-box .home .image-box i {
   position: absolute;
   padding: 10px;
-  color: #FFF;
+  color: #fff;
   width: 40px;
   height: 40px;
   text-align: center;
@@ -313,7 +315,7 @@ body {
 }
 
 .profile-box .home .image-box .fa-facebook-f:hover {
-  background-color: #FFF;
+  background-color: #fff;
   color: #3b5998;
   border: 1px solid #3b5998;
 }
@@ -332,7 +334,7 @@ body {
 }
 
 .profile-box .home .image-box .fa-twitter:hover {
-  background-color: #FFF;
+  background-color: #fff;
   color: #1da1f2;
   border: 1px solid #1da1f2;
 }
@@ -351,7 +353,7 @@ body {
 }
 
 .profile-box .home .image-box .fa-linkedin-in:hover {
-  background-color: #FFF;
+  background-color: #fff;
   color: #0073b1;
   border: 1px solid #0073b1;
 }
@@ -370,7 +372,7 @@ body {
 }
 
 .profile-box .home .image-box .fa-pinterest-p:hover {
-  background-color: #FFF;
+  background-color: #fff;
   color: #e60023;
   border: 1px solid #e60023;
 }
@@ -389,7 +391,7 @@ body {
 }
 
 .profile-box .home .image-box .fa-tumblr:hover {
-  background-color: #FFF;
+  background-color: #fff;
   color: #3a5976;
   border: 1px solid #3a5976;
 }
@@ -408,7 +410,7 @@ body {
 }
 
 .profile-box .home .image-box .fa-github:hover {
-  background-color: #FFF;
+  background-color: #fff;
   color: #7292a2;
   border: 1px solid #7292a2;
 }
@@ -427,7 +429,7 @@ body {
 }
 
 .profile-box .home .image-box .fa-youtube:hover {
-  background-color: #FFF;
+  background-color: #fff;
   color: #f45750;
   border: 1px solid #f45750;
 }
@@ -446,7 +448,7 @@ body {
 }
 
 .profile-box .home .image-box .fa-dribbble:hover {
-  background-color: #FFF;
+  background-color: #fff;
   color: #ef5b92;
   border: 1px solid #ef5b92;
 }
@@ -477,7 +479,7 @@ body {
 }
 
 .basic-detail .detail-col p {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .basic-detail .btn-cover {
@@ -578,7 +580,6 @@ body {
   width: 100%;
 }
 
-
 .change-password-list tr td {
   padding: 13px 10px;
 }
@@ -604,17 +605,17 @@ body {
 }
 
 .addrss-list tr {
-  border-left: 1px solid #CCC;
+  border-left: 1px solid #ccc;
 }
 
 .addrss-list tr td {
   padding: 13px 10px;
-  border: 1px solid #CCC;
+  border: 1px solid #ccc;
 }
 
 .addrss-list tr th {
-  border-top: 1px solid #CCC;
-  border-bottom: 1px solid #CCC;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   padding: 13px 10px;
 }
 
