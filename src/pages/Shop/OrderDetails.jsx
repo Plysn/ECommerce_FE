@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(config => {
 
 const OrderDetails = () => {
   const location = useLocation();
-  const { orderId, amount, paymentMethod } = location.state || {};
+  const { orderId, amount, paymentMethod, created_at } = location.state || {};
   const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
@@ -49,10 +49,11 @@ const OrderDetails = () => {
             title={"Our Shop Pages"}
             curPage={"Order Details"}
         />
-        <div className="" style={{ paddingTop:'0px', paddingLeft:'50px' , width: '18rem' }}>
+        <div className="" style={{ paddingTop:'0px', paddingLeft:'50px' , width: '30rem' }}>
         <p>● Order ID: {orderId}</p>
         <p>● Amount: ${amount}</p>   
         <p>● Payment Method: {paymentMethod}</p>
+        <p>● Time: {created_at}</p>
         </div>
     </div>
   );

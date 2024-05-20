@@ -78,8 +78,8 @@ const Orders = () => {
             <div key={order.id} className="list-group-item d-flex justify-content-between align-items-center">
               <div>
                 <div><strong>Order ID:</strong> {order.id}</div>
-                <div><strong>Amount:</strong> {order.amount}</div>
-                <div><strong>Payment Method:</strong> {order.payment_method}</div>
+                <div><strong>Amount:</strong> ${order.amount}</div>
+                {/* <div><strong>Payment Method:</strong> {order.payment_method}</div> */}
               </div>
               <div>
                 <Link
@@ -87,7 +87,8 @@ const Orders = () => {
                   state={{ 
                     orderId: order.id, 
                     amount: order.amount, 
-                    paymentMethod: order.payment_method 
+                    paymentMethod: order.payment_method,
+                    created_at: order.created_at  
                   }}
                   className="btn btn-primary mr-2"
                 >

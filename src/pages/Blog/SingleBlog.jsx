@@ -119,10 +119,10 @@ const SingleBlog = () => {
                                   yet feel that never was greater artst
                                 </p>
 
-                                <img
+                                {/* <img
                                   src="/src/assets/images/blog/single/01.jpg"
                                   alt="rajibraj91"
-                                />
+                                /> */}
 
                                 <p>
                                   Serenity hasir taken poseson mying entre soung
@@ -142,18 +142,18 @@ const SingleBlog = () => {
                                 </p>
 
                                 <div className="video-thumb">
-                                  <img
+                                  {/* <img
                                     src="/src/assets/images/blog/single/02.jpg"
                                     alt="video"
-                                  />
-                                  <a
+                                  /> */}
+                                  {/* <a
                                     href="https://youtu.be/2qWo6W5Wn8Q"
                                     className="video-button popup"
                                     target="_blank"
                                     rel="noreferrer"
                                   >
                                     <i className="icofont-ui-play"></i>
-                                  </a>
+                                  </a> */}
                                 </div>
 
                                 <p>
@@ -183,7 +183,7 @@ const SingleBlog = () => {
                                       <a href="#">Personal</a>
                                     </li>
                                   </ul>
-                                  <ul className="lab-ul social-icons">
+                                  {/* <ul className="lab-ul social-icons">
                                     {socialList.map((val, i) => (
                                       <li key={i}>
                                         <a
@@ -194,7 +194,7 @@ const SingleBlog = () => {
                                         </a>
                                       </li>
                                     ))}
-                                  </ul>
+                                  </ul> */}
                                 </div>
                               </div>
                             </div>
@@ -202,27 +202,23 @@ const SingleBlog = () => {
                         </div>
                       </div>
 
-                      <div className="navigations-part">
+                      {/* <div className="navigations-part">
                         <div className="left">
                           <a href="#" className="prev">
-                            <i className="icofont-double-left"></i>Previous
+                            <i></i>Previous
                             Article
                           </a>
                           <a href="#" className="title">
-                            Evisculate Parallel Processes via Technica Sound
-                            Models Authoritative
                           </a>
                         </div>
                         <div className="right">
                           <a href="#" className="prev">
-                            Next Article<i className="icofont-double-right"></i>
+                            Next Article<i></i>
                           </a>
                           <a href="#" className="title">
-                            Qvisculate Parallel Processes via Technica Sound
-                            Models Authoritative
                           </a>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

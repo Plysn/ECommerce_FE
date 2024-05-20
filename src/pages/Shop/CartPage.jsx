@@ -12,6 +12,7 @@ const CartPage = () => {
   const [address, setAddress] = useState('');
   const [shippingFee, setShippingFee] = useState(0);
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
+  const [isFormCompleted, setIsFormCompleted] = useState(false);
 
   // Tạo một instance của axios
   const axiosInstance = axios.create({
@@ -117,6 +118,9 @@ const CartPage = () => {
 
   // Calculate the order total
   const orderTotal = cartSubtotal + shippingFee;
+  useEffect(() => {
+    setIsFormCompleted(city !== '' && address !== '');
+  }, [city, address]);
 
   return (
     <div>
@@ -309,13 +313,27 @@ const CartPage = () => {
               </div> */}
 
               {/* checkout box */}
-              <div className="cart-checkout-box">
+              {/* <div className="cart-checkout-box">
                 <form className="cart-checkout" action="/">
                   <div>
                     <CheckoutPage amount={orderTotal} />
                   </div>
                 </form>
-              </div>
+              </div> */}
+              {isFormCompleted ? (
+                <div className="cart-checkout-box">
+                  <form className="cart-checkout" action="/">
+                    <div>
+                      <CheckoutPage amount={orderTotal} />
+                    </div>
+                  </form>
+                </div>
+              ) : (
+                <div>
+                  <p>Please select a city and enter a shipping address to proceed to checkout.</p>
+                </div>
+              )}
+
             </div>
           </div>
         </div>
