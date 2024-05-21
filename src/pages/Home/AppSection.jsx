@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
 const btnText = "Sign up for Free";
-const title = "Learn Anytime, Anywhere";
+const title = "Shop Anytime, Anywhere";
 const desc =
-  "Take courses on your any device with our app & learn all time what you want. Just download & install & start to learn";
+  "Let's shopping!!!";
 
 const AppSection = () => {
   return (
