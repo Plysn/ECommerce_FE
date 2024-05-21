@@ -14,7 +14,7 @@ const productApi = {
     return apiImg.post("/products/create", data);
   },
   updateProduct(id, param) {
-    return api.put(`/products/update/${id}`, param);
+    return apiImg.put(`/products/update/${id}`, param);
   },
   deleteProduct(id) {
     return api.delete(`/products/delete/${id}`);

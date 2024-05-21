@@ -167,14 +167,10 @@ const ProductAdminPage = () => {
     }
     console.log(values);
     try {
-      const res = await productApi.update(id, values);
-      if (res) {
-        setVisibleEdit(false);
-        fetchData();
-        message.success("Product updated successfully");
-      } else {
-        console.error("Response or response.data is undefined");
-      }
+      await productApi.updateProduct(id, values);
+      setVisibleEdit(false);
+      fetchData();
+      message.success("Product updated successfully");
     } catch (error) {
       console.log(error);
       if (error.response.data.message === "image is not allowed") {
